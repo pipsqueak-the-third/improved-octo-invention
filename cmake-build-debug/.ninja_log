@@ -1,0 +1,25 @@
+# ninja log v5
+445	841	1713253333077193453	CMakeFiles/CGPraktikum.dir/src/WireframeRenderer.cpp.o	1d91891d687c7a32
+419	763	1713253332998329778	CMakeFiles/CGPraktikum.dir/src/Sphere.cpp.o	3516bb7b809c2407
+4	483	1713253332719170181	CMakeFiles/CGPraktikum.dir/src/Image.cpp.o	599c45af4fbdebc3
+2	379	1713253332616718767	CMakeFiles/CGPraktikum.dir/src/GLMatrix.cpp.o	de0bb4b944f86436
+3	335	1713253887659802054	build.ninja	4ece0353611a6cbe
+59	488	1713253332725802470	CMakeFiles/CGPraktikum.dir/src/Model.cpp.o	a7c53f959c1ffaf1
+3	418	1713253332652591599	CMakeFiles/CGPraktikum.dir/src/GLPoint.cpp.o	970460023a009259
+2	59	1713253332297745980	CMakeFiles/CGPraktikum.dir/src/Color.cpp.o	245aec0e2c0976b7
+3	412	1713253332648929932	CMakeFiles/CGPraktikum.dir/src/GLVector.cpp.o	3ab82928567b9929
+380	893	1713253333131466903	CMakeFiles/CGPraktikum.dir/src/Scene.cpp.o	d7f71e5525640bc0
+2	445	1713253332675214060	CMakeFiles/CGPraktikum.dir/src/Camera.cpp.o	aeae660ad3a9cc66
+412	841	1713253333079822553	CMakeFiles/CGPraktikum.dir/src/SolidRenderer.cpp.o	dca82dcaa2981a64
+1017	1136	1713253333375156687	CGPraktikum	9e93a08991d61e26
+483	1017	1713253333255240893	CMakeFiles/CGPraktikum.dir/src/main.cpp.o	672e08e39115cfb9
+11	542	1713254879272869573	CMakeFiles/CGPraktikum.dir/src/WireframeRenderer.cpp.o	1d91891d687c7a32
+12	677	1713254879409383897	CMakeFiles/CGPraktikum.dir/src/main.cpp.o	672e08e39115cfb9
+677	796	1713254879529302517	CGPraktikum	9e93a08991d61e26
+17	261	1713857829295050998	CMakeFiles/CGPraktikum.dir/src/Color.cpp.o	245aec0e2c0976b7
+6	490	1713859095151034604	CMakeFiles/CGPraktikum.dir/src/WireframeRenderer.cpp.o	1d91891d687c7a32
+6	621	1713859095281840591	CMakeFiles/CGPraktikum.dir/src/main.cpp.o	672e08e39115cfb9
+621	800	1713859095462105299	CGPraktikum	9e93a08991d61e26
+15	345	1714228459686877800	CMakeFiles/CGPraktikum.dir/src/WireframeRenderer.cpp.o	1d91891d687c7a32
+15	489	1714228459826834656	CMakeFiles/CGPraktikum.dir/src/main.cpp.o	672e08e39115cfb9
+489	522	1714228459864738391	CGPraktikum	9e93a08991d61e26

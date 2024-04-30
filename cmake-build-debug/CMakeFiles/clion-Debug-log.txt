@@ -1,0 +1,9 @@
+/Users/navi/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Users/navi/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/navi/Documents/CGPraktikum -B /Users/navi/Documents/CGPraktikum/cmake-build-debug
+-- !!! ASSIMP found and added to dependencies
+-- Could NOT find OpenMP_C (missing: OpenMP_C_FLAGS OpenMP_C_LIB_NAMES) 
+-- Could NOT find OpenMP_CXX (missing: OpenMP_CXX_FLAGS OpenMP_CXX_LIB_NAMES) 
+-- Could NOT find OpenMP (missing: OpenMP_C_FOUND OpenMP_CXX_FOUND) 
+-- !!! OpenMP not found | OpenMP should be installed for exercise 3 and 4
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/navi/Documents/CGPraktikum/cmake-build-debug
