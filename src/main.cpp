@@ -55,6 +55,9 @@ int main(int argc, char **argv) {
         wf.drawBresenhamLine(c, z, borderColor);
         //Closing the cirle
         angle = (n+1) * M_PI / 8;
+        if (n==15){
+            angle = 0;
+        }
         GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
         wf.drawBresenhamLine(z, p, borderColor);
     }
@@ -65,7 +68,7 @@ int main(int argc, char **argv) {
     std::default_random_engine generator;
     std::uniform_real_distribution<float> distribution(0, 1);
 
-    for (int n = 0;n < 0; n++) {
+    for (int n = 0;n < 16; n++) {
         // Equation obtained solving for 0.5 * o * Zn
         double angle = (2 * n + 1) * M_PI / 16;
         double re = x0 - 0.5 * a * cos(angle);
