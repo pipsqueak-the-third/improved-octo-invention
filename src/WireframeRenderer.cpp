@@ -32,7 +32,7 @@ void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
 
     int limiter = (dx < dy) ? dy : dx;
 
-    for(int i = 0; i < limiter; i++){
+    for(int i = 0; i <= limiter; i++){
         //Here taken into consideration that x is flipped as explained in Image.hpp (12)
         mImage->setValue((int) mImage->getWidth() - x1, y1, color);
         if (dx < dy){

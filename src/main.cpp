@@ -55,9 +55,6 @@ int main(int argc, char **argv) {
         wf.drawBresenhamLine(c, z, borderColor);
         //Closing the cirle
         angle = (n+1) * M_PI / 8;
-        if (n==15){
-            angle = 0;
-        }
         GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
         wf.drawBresenhamLine(z, p, borderColor);
     }
