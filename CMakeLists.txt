@@ -8,7 +8,7 @@ project(CGPraktikum)
 # these instructions search the directory tree when cmake is
 # invoked and put all files that match the pattern in the variables 
 # `sources` and `data`
-file(GLOB sources  ./src/*.cpp ./src/*.hpp)
+file(GLOB sources src/*.cpp src/*.hpp)
 # you can use set(sources src/main.cpp) etc if you don't want to
 # use globing to find files automatically
 
