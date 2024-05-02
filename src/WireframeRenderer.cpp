@@ -25,65 +25,151 @@ void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
     //Delta experiences no change per quadrant
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);
+
     //Here we define the quadrant that it finds itself in
-    int sx = x1 < x2 ? 1 : -1;
-    int sy = y1 < y2 ? 1 : -1;
-    int err = dx < dy ? 2 * dy - dx : 2 * dx - dy;
+    int sx;
+    int sy;
+    int err;
 
-    int limiter = (dx < dy) ? dy : dx;
+    int limiter;
 
-    for(int i = 0; i <= limiter; i++){
-        //Here taken into consideration that x is flipped as explained in Image.hpp (12)
-        mImage->setValue((int) mImage->getWidth() - x1, y1, color);
-        if (dx < dy){
-            if (err < 0) {
+    //Octants 2, 4, 6, 8
+    if (dx < dy) {
+        limiter = dy;
+        err = 2 * dy - dx;
+
+        //Octant 2
+        if (x1 < x2 && y1 <= y2) {
+            sx = 1;
+            sy = 1;
+
+            for(int i = 0; i <= limiter; i++){
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
                 x1 += sx;
                 err += 2 * dy;
+                }
+                y1 += sy;
+                err -= 2 * dx;
             }
-            y1 += sy;
-            err -= 2 * dx;
-        }else{
-            if (err < 0) {
+            
+        } 
+        //Octant 8
+        else if (x1 < x2 && y1 > y2) {
+            sx = 1;
+            sy = -1;
+
+            for(int i = 0; i <= limiter; i++){
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
+                x1 += sx;
+                err += 2 * dy;
+                }
+                y1 += sy;
+                err -= 2 * dx;
+            }
+        } 
+        //Octant 4
+        else if (x1 >= x2 && y1 < y2) {
+            sx = -1;
+            sy = 1;
+
+            for(int i = 0; i <= limiter; i++){
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
+                x1 += sx;
+                err += 2 * dy;
+                }
+                y1 += sy;
+                err -= 2 * dx;
+            }
+        } 
+        //Octant 6
+        else if (x1 > x2 && y1 > y2) {
+            sx = -1;
+            sy = -1;
+
+            for(int i = 0; i <= limiter; i++){
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
+                x1 += sx;
+                err += 2 * dy;
+                }
+                y1 += sy;
+                err -= 2 * dx;
+            }
+        }
+
+    } 
+    // Octants 1, 3, 5, 7
+    else {
+        limiter = dx;
+        err = 2 * dx - dy;
+
+        //Octant 1
+        if (x1 < x2 && y1 <= y2) {
+            sx = 1;
+            sy = 1;
+
+            for(int i = 0; i <= limiter; i++){ 
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
                 y1 += sy;
                 err += 2 * dx;
+                }
+                x1 += sx;
+                err -= 2 * dy; 
             }
-            x1 += sx;
-            err -= 2 * dy;
+        } 
+        //Octant 7
+        else if (x1 < x2 && y1 > y2) {
+            sx = 1;
+            sy = -1;
+
+            for(int i = 0; i <= limiter; i++){ 
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
+                y1 += sy;
+                err += 2 * dx;
+                }
+                x1 += sx;
+                err -= 2 * dy; 
+            }
+        } 
+        //Octant 3
+        else if (x1 > x2 && y1 <= y2) {
+            sx = -1;
+            sy = 1;
+
+            for(int i = 0; i <= limiter; i++){
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color); 
+                if (err < 0) {
+                y1 += sy;
+                err += 2 * dx;
+                }
+                x1 += sx;
+                err -= 2 * dy; 
+            }
+        } 
+        //Octant 5
+        else if (x1 > x2 && y1 > y2) {
+            sx = -1;
+            sy = -1;
+
+            for(int i = 0; i <= limiter; i++){ 
+                mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+                if (err < 0) {
+                y1 += sy;
+                err += 2 * dx;
+                }
+                x1 += sx;
+                err -= 2 * dy; 
+            }
         }
+        
     }
 }
-/* Implementation TOO COOL FO SCHOOL
-void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
-    //Aliases for easier access to (x1,y2) and (x2,y2) coordinates
-    int x1 = (int)(p1(0));
-    int y1 = (int)(p1(1));
-    int x2 = (int)(p2(0));
-    int y2 = (int)(p2(1));
 
-    //Delta experiences no change per quadrant
-    int dx = abs(x2 - x1);
-    int dy = abs(y2 - y1);
-    //Here we define the quadrant that it finds itself in
-    int sx = x1 < x2 ? 1 : -1;
-    int sy = y1 < y2 ? 1 : -1;
-    int err = dy - dx;
-
-    while (x1 != x2 || y1 != y2) {
-        //Here taken into consideration that x is flipped as explained in Image.hpp (12)
-        mImage->setValue((int) mImage->getWidth() - x1, y1, color);
-        int e2 = 2 * err;
-
-        if (e2 < dy) {
-            x1 += sx;
-            err += dy;
-        }
-        if (e2 > -dx) {
-            y1 += sy;
-            err -= dx;
-        }
-    }
-}
-*/
 /**
 ** Füllt einen vorgegebenen Bereich (abgegrenzt durch Randfarbe/borderColor) mit einer vorgegebenen Farbe (fillColor).
 ** Precondition: Das mImage muss gesetzt sein.
