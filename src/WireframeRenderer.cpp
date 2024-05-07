@@ -198,7 +198,7 @@ void WireframeRenderer::seedFillArea(GLPoint seed, Color borderColor, Color fill
             Color currentColor = mImage->getValues()[y * width + x];
 
             // Check if the current pixel hasn't been visited and is not the borderColor
-            if (currentColor!=(fillColor) && currentColor!=(borderColor)){
+            if (currentColor!=fillColor && currentColor!=borderColor){
 
                 // Fill the current pixel with the fillColor
                 mImage->setValue(x, y, fillColor);
