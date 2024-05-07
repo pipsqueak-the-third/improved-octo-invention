@@ -17,10 +17,10 @@ void WireframeRenderer::renderScene(Color color) {
 **/
 void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
     //Aliases for easier access to (x1,y2) and (x2,y2) coordinates
-    int x1 = (int)(p1(0));
-    int y1 = (int)(p1(1));
-    int x2 = (int)(p2(0));
-    int y2 = (int)(p2(1));
+    int x1 = (int)p1(0);
+    int y1 = (int)p1(1);
+    int x2 = (int)p2(0);
+    int y2 = (int)p2(1);
 
     //Delta experiences no change per quadrant
     int dx = abs(x2 - x1);
@@ -28,13 +28,14 @@ void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
     //Here we define the quadrant that it finds itself in
     int sx = x1 < x2 ? 1 : -1;
     int sy = y1 < y2 ? 1 : -1;
+    //Determines the longer axis so that the error rate is err = 2 * (smaller axis) - (bigger axis)
     int err = dx < dy ? 2 * dy - dx : 2 * dx - dy;
-
+    //Limits the Cycle up to the longest axis
     int limiter = (dx < dy) ? dy : dx;
-
     for(int i = 0; i <= limiter; i++){
         //Here taken into consideration that x is flipped as explained in Image.hpp (12)
         mImage->setValue((int) mImage->getWidth() - x1, y1, color);
+        //Implements for shorter x-axis else y-axis implementation is used
         if (dx < dy){
             if (err < 0) {
                 x1 += sx;
@@ -52,38 +53,7 @@ void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
         }
     }
 }
-/* Implementation TOO COOL FO SCHOOL
-void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
-    //Aliases for easier access to (x1,y2) and (x2,y2) coordinates
-    int x1 = (int)(p1(0));
-    int y1 = (int)(p1(1));
-    int x2 = (int)(p2(0));
-    int y2 = (int)(p2(1));
 
-    //Delta experiences no change per quadrant
-    int dx = abs(x2 - x1);
-    int dy = abs(y2 - y1);
-    //Here we define the quadrant that it finds itself in
-    int sx = x1 < x2 ? 1 : -1;
-    int sy = y1 < y2 ? 1 : -1;
-    int err = dy - dx;
-
-    while (x1 != x2 || y1 != y2) {
-        //Here taken into consideration that x is flipped as explained in Image.hpp (12)
-        mImage->setValue((int) mImage->getWidth() - x1, y1, color);
-        int e2 = 2 * err;
-
-        if (e2 < dy) {
-            x1 += sx;
-            err += dy;
-        }
-        if (e2 > -dx) {
-            y1 += sy;
-            err -= dx;
-        }
-    }
-}
-*/
 /**
 ** Füllt einen vorgegebenen Bereich (abgegrenzt durch Randfarbe/borderColor) mit einer vorgegebenen Farbe (fillColor).
 ** Precondition: Das mImage muss gesetzt sein.
@@ -102,8 +72,8 @@ void WireframeRenderer::seedFillArea(GLPoint seed, Color borderColor, Color fill
         GLPoint toppy = stack.top();
         stack.pop();
 
-        int x = (int)(toppy(0));
-        int y = (int)(toppy(1));
+        int x = (int)toppy(0);
+        int y = (int)toppy(1);
 
         // Check if the current point is within the image bounds
         if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -112,7 +82,7 @@ void WireframeRenderer::seedFillArea(GLPoint seed, Color borderColor, Color fill
             Color currentColor = mImage->getValues()[y * width + x];
 
             // Check if the current pixel hasn't been visited and is not the borderColor
-            if (currentColor!=(fillColor) && currentColor!=(borderColor)){
+            if (currentColor!=fillColor && currentColor!=borderColor){
 
                 // Fill the current pixel with the fillColor
                 mImage->setValue(x, y, fillColor);
