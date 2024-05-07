@@ -72,9 +72,9 @@ int main(int argc, char **argv) {
         double im = y0 + 0.5 * a * sin(angle);
 
         //Randomly generated RGB values
-        float r = 255 * distribution(generator);
-        float g = 255 * distribution(generator);
-        float b = 255 * distribution(generator);
+        float r = distribution(generator);
+        float g = distribution(generator);
+        float b = distribution(generator);
         Color fillColor(r,g,b);
 
         //Seed Fill Generation
