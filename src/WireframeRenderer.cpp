@@ -7,10 +7,19 @@
 ** (Aufgabenblatt 2 - Aufgabe 1)
 **/
 void WireframeRenderer::renderScene(Color color) {
+    std::vector<Model> supermodel = mScene->getModels();
+    for(Model model : supermodel){
+        std::vector<Triangle> tri = model.mTriangles;
+        for(Triangle triangle : tri){
+            drawBresenhamLine(triangle.vertex[0],triangle.vertex[1],color);
+            drawBresenhamLine(triangle.vertex[0],triangle.vertex[2],color);
+            drawBresenhamLine(triangle.vertex[1],triangle.vertex[2],color);
+        }
+    }
 }
 
 /**
-** Zeichnet unter Verwendung des Bresenham Algorithmus eine Linie zwischen p1
+** Zeic;hnet unter Verwendung des Bresenham Algorithmus eine Linie zwischen p1
 * und p2 (nutzt x & y Komponente - z Komponente wird ignoriert)
 ** Precondition: Das mImage muss gesetzt sein.
 ** (Aufgabenblatt 1 - Aufgabe 2)
