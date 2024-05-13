@@ -54,3 +54,15 @@ inline double dotProduct(const GLVector &lhs, const GLVector &rhs) {
 inline int sgn(int x) { return (x > 0) ? 1 : (x < 0) ? -1 : 0; }
 
 /** Aufgabenblatt 2, Aufgabe 2 **/
+
+inline GLMatrix matrixMultVector(const GLMatrix &m, const GLVector &v) {
+  
+}
+
+inline GLMatrix matrixMultPoint(const GLMatrix &m, const GLPoint &p) {
+
+}
+
+inline GLMatrix matrixMultMatrix(const GLMatrix &m1, const GLMatrix &m2) {
+
+}
