@@ -37,10 +37,12 @@ int main(int argc, char **argv) {
     /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer */
     WireframeRenderer wf = WireframeRenderer(scene, img);
 
-    /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier */
+    Color borderColor(0, 0, 0);
+
+    /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier
 
     //Placing point c in the Center
-    Color borderColor(0, 0, 0);
+    
     int x0 = (int) img->getWidth() / 2;
     int y0 = (int) img->getHeight() / 2;
     GLPoint c = GLPoint(x0, y0, 0);
@@ -59,7 +61,9 @@ int main(int argc, char **argv) {
         wf.drawBresenhamLine(z, p, borderColor);
     }
 
-  /* Aufgabenblatt 1, Aufgabe 3: Testen Sie Ihre seedFillArea-Methode hier */
+  */
+
+  /* Aufgabenblatt 1, Aufgabe 3: Testen Sie Ihre seedFillArea-Methode hier
 
   //Random Number Generator (set outside to prevent issues experienced before)
     std::default_random_engine generator;
@@ -81,6 +85,8 @@ int main(int argc, char **argv) {
         GLPoint seed = GLPoint(re,im, 0);
         wf.seedFillArea(seed, borderColor, fillColor);
     }
+  */
+  
 
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die Transformationen der Modelle */
 

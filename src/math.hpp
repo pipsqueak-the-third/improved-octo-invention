@@ -54,3 +54,40 @@ inline double dotProduct(const GLVector &lhs, const GLVector &rhs) {
 inline int sgn(int x) { return (x > 0) ? 1 : (x < 0) ? -1 : 0; }
 
 /** Aufgabenblatt 2, Aufgabe 2 **/
+
+inline GLVector matrixMultVector(const GLMatrix &m, const GLVector &v) {
+  GLVector result;
+  for (int i = 0; i < 4; i++) {
+    int value = 0;
+    for (int j = 0; j < 4; j++) {
+      value += value * i;
+    }
+    result.operator()(i) = value;
+  }
+  return result;
+}
+
+// ??? difference to vector ???
+inline GLPoint matrixMultPoint(const GLMatrix &m, const GLPoint &p) {
+  GLPoint result;
+  for (int i = 0; i < 4; i++) {
+    int value = 0;
+    for (int j = 0; j < 4; j++) {
+      value += value * i;
+    }
+    result.operator()(i) = value;
+  }
+  return result;
+}
+
+inline GLMatrix matrixMultMatrix(const GLMatrix &m1, const GLMatrix &m2) {
+  GLMatrix result;
+  for (size_t i = 0; i < 4; ++i) {
+    for (size_t j = 0; j < 4; ++j) {
+      for (int k = 0; k < 4; k++) {
+        result.setValue(i, j, m1.operator()(i, k) * m2.operator()(k, j));
+      }
+    }
+  }
+  return result;
+}
