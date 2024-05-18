@@ -11,6 +11,13 @@ void WireframeRenderer::renderScene(Color color) {
     for(Model model : supermodel){
         std::vector<Triangle> tri = model.mTriangles;
         for(Triangle triangle : tri){
+
+            //Applies transformation
+            GLPoint v0 = matrixMultPoint(model.getTransformation(), triangle.vertex[0]);
+            GLPoint v1 = matrixMultPoint(model.getTransformation(), triangle.vertex[1]);
+            GLPoint v2 = matrixMultPoint(model.getTransformation(), triangle.vertex[2]);
+
+            //Draws tranformed vertices
             drawBresenhamLine(triangle.vertex[0],triangle.vertex[1],color);
             drawBresenhamLine(triangle.vertex[0],triangle.vertex[2],color);
             drawBresenhamLine(triangle.vertex[1],triangle.vertex[2],color);
@@ -19,7 +26,7 @@ void WireframeRenderer::renderScene(Color color) {
 }
 
 /**
-** Zeic;hnet unter Verwendung des Bresenham Algorithmus eine Linie zwischen p1
+** Zeichnet unter Verwendung des Bresenham Algorithmus eine Linie zwischen p1
 * und p2 (nutzt x & y Komponente - z Komponente wird ignoriert)
 ** Precondition: Das mImage muss gesetzt sein.
 ** (Aufgabenblatt 1 - Aufgabe 2)
