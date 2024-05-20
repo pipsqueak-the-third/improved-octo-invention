@@ -57,27 +57,25 @@ inline int sgn(int x) { return (x > 0) ? 1 : (x < 0) ? -1 : 0; }
 
 inline GLVector matrixMultVector(const GLMatrix &m, const GLVector &v) {
   GLVector result;
-  for (int i = 0; i < 4; i++) {
-    int value = 0;
-    for (int j = 0; j < 4; j++) {
-      value += value * i;
+  for (int i = 0; i < 4; ++i) {
+      result(i) = 0.0;
+      for (int j = 0; j < 4; ++j) {
+          result(i) += m(i,j)* v(j);
+      }
     }
-    result.operator()(i) = value;
-  }
   return result;
 }
 
 // ??? difference to vector ???
 inline GLPoint matrixMultPoint(const GLMatrix &m, const GLPoint &p) {
-  GLPoint result;
-  for (int i = 0; i < 4; i++) {
-    int value = 0;
-    for (int j = 0; j < 4; j++) {
-      value += value * i;
+    GLPoint result;
+    for (int i = 0; i < 4; ++i) {
+        result(i) = 0.0;
+        for (int j = 0; j < 4; ++j) {
+            result(i) += m(i,j)* p(j);
+        }
     }
-    result.operator()(i) = value;
-  }
-  return result;
+    return result;
 }
 
 inline GLMatrix matrixMultMatrix(const GLMatrix &m1, const GLMatrix &m2) {
