@@ -116,14 +116,14 @@ int main(int argc, char **argv) {
   Model& bunny = models[0];
   Model& cube = models[1];
 
-  bunny.setTranslation(GLVector(0,0,0));
-  bunny.setScale(GLVector(2,2,1));
+  bunny.setTranslation(GLVector(200,200,0));
+  bunny.setScale(GLVector(1.5,1.5,1.5));
   bunny.setRotation(GLVector(0,0,0));
 
 
-  cube.setTranslation(GLVector(0,0,0));
+  cube.setTranslation(GLVector(450,300,0));
   cube.setScale(GLVector(1,1,1));
-  cube.setRotation(GLVector(0,0,0));
+  cube.setRotation(GLVector(2,2,2));
   
 
 

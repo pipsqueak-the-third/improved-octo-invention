@@ -69,12 +69,9 @@ inline GLVector matrixMultVector(const GLMatrix &m, const GLVector &v) {
 // ??? difference to vector ???
 inline GLPoint matrixMultPoint(const GLMatrix &m, const GLPoint &p) {
     GLPoint result;
-    for (int i = 0; i < 4; ++i) {
-        result(i) = 0.0;
-        for (int j = 0; j < 4; ++j) {
-            result(i) += m(i,j)* p(j);
-        }
-    }
+  for (int i = 0; i < 3; ++i) {
+    result(i) = m(i, 0) * p(0) + m(i, 1) * p(1) + m(i, 2) * p(2) + m(i, 3);
+  }
     return result;
 }
 

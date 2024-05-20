@@ -19,6 +19,8 @@ void WireframeRenderer::renderScene(Color color) {
 
             std::cout << triangle.vertex[0];
             std::cout << v0;
+            std::printf("    ");
+
 
             //Draws tranformed vertices
             drawBresenhamLine(v0, v1, color);
