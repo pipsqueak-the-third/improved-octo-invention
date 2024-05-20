@@ -3,6 +3,7 @@
 // Konstruktor
 Model::Model()  {
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die default Werte */
+
   mTranslation(0) = 0;
   mTranslation(1) = 0;
   mTranslation(2) = 0;

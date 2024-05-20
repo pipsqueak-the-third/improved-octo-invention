@@ -84,8 +84,9 @@ inline GLMatrix matrixMultMatrix(const GLMatrix &m1, const GLMatrix &m2) {
   GLMatrix result;
   for (size_t i = 0; i < 4; ++i) {
     for (size_t j = 0; j < 4; ++j) {
+      result.setValue(i, j, 0);
       for (int k = 0; k < 4; k++) {
-        result.setValue(i, j, m1.operator()(i, k) * m2.operator()(k, j));
+        result.setValue(i, j, result(i, j) + m1(i, k) * m2(k, j));
       }
     }
   }

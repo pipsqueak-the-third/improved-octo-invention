@@ -12,15 +12,15 @@ void WireframeRenderer::renderScene(Color color) {
         std::vector<Triangle> tri = model.mTriangles;
         for(Triangle triangle : tri){
 
-            //Applies transformation
+            //Apply transformation
             GLPoint v0 = matrixMultPoint(model.getTransformation(), triangle.vertex[0]);
             GLPoint v1 = matrixMultPoint(model.getTransformation(), triangle.vertex[1]);
             GLPoint v2 = matrixMultPoint(model.getTransformation(), triangle.vertex[2]);
 
             //Draws tranformed vertices
-            drawBresenhamLine(triangle.vertex[0],triangle.vertex[1],color);
-            drawBresenhamLine(triangle.vertex[0],triangle.vertex[2],color);
-            drawBresenhamLine(triangle.vertex[1],triangle.vertex[2],color);
+            drawBresenhamLine(v0, v1, color);
+            drawBresenhamLine(v0, v2, color);
+            drawBresenhamLine(v1, v2, color);
         }
     }
 }

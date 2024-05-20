@@ -90,6 +90,39 @@ int main(int argc, char **argv) {
 
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die Transformationen der Modelle */
   
+  //Testing... Testing...
+  GLMatrix m1;
+  GLMatrix m2;
+
+  m1.setValue(0,1,3);
+  m2.setValue(0,0,2);
+  m2.setValue(1,0,4);
+
+  GLVector v1(1,2,3);
+  GLPoint p1(1,2,4);
+
+  GLMatrix m3 = matrixMultMatrix(m1, m2);
+
+  GLVector v2 = matrixMultVector(m1, v1);
+  GLPoint p2 = matrixMultPoint(m1, p1);
+
+  std::cout << m3;
+  std::cout << v2;
+  std::cout << p2;
+
+  std::vector<Model> models = scene->getModels();
+
+  Model bunny = models[0];
+  Model cube = models[1];
+
+  bunny.setTranslation(GLVector(100,100,1));
+  bunny.setRotation(GLVector(1,1,1));
+  bunny.setScale(GLVector(2,2,2));
+
+  cube.setTranslation(GLVector(1,1,1));
+  cube.setRotation(GLVector(1,1,1));
+  cube.setScale(GLVector(1,1,1));
+
 
   /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
   wf.renderScene(borderColor);
