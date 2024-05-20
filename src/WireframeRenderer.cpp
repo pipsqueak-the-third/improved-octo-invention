@@ -17,6 +17,9 @@ void WireframeRenderer::renderScene(Color color) {
             GLPoint v1 = matrixMultPoint(model.getTransformation(), triangle.vertex[1]);
             GLPoint v2 = matrixMultPoint(model.getTransformation(), triangle.vertex[2]);
 
+            std::cout << triangle.vertex[0];
+            std::cout << v0;
+
             //Draws tranformed vertices
             drawBresenhamLine(v0, v1, color);
             drawBresenhamLine(v0, v2, color);

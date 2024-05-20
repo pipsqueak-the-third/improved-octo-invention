@@ -84,9 +84,9 @@ void Model::updateMatrix() {
     matrixMultMatrix(
       matrixMultMatrix(
         matrixMultMatrix(
-          translationMatrix, rotationX
+          translationMatrix, rotationZ
         ), rotationY
-      ), rotationZ
+      ), rotationX
     ), scaleMatrix
   );
 }

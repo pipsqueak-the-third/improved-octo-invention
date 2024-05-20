@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
 
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die Transformationen der Modelle */
   
-  //Testing... Testing...
+  /*Testing... Testing...
   GLMatrix m1;
   GLMatrix m2;
 
@@ -109,19 +109,22 @@ int main(int argc, char **argv) {
   std::cout << m3;
   std::cout << v2;
   std::cout << p2;
+  */ 
 
-  std::vector<Model> models = scene->getModels();
+  std::vector<Model>& models = scene->getModels();
 
-  Model bunny = models[0];
-  Model cube = models[1];
+  Model& bunny = models[0];
+  Model& cube = models[1];
 
-  bunny.setTranslation(GLVector(100,100,1));
-  bunny.setRotation(GLVector(1,1,1));
-  bunny.setScale(GLVector(2,2,2));
+  bunny.setTranslation(GLVector(0,0,0));
+  bunny.setScale(GLVector(2,2,1));
+  bunny.setRotation(GLVector(0,0,0));
 
-  cube.setTranslation(GLVector(1,1,1));
-  cube.setRotation(GLVector(1,1,1));
+
+  cube.setTranslation(GLVector(0,0,0));
   cube.setScale(GLVector(1,1,1));
+  cube.setRotation(GLVector(0,0,0));
+  
 
 
   /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
