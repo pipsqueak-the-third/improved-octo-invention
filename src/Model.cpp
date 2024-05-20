@@ -3,7 +3,6 @@
 // Konstruktor
 Model::Model()  {
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die default Werte */
-
   mTranslation(0) = 0;
   mTranslation(1) = 0;
   mTranslation(2) = 0;
@@ -80,6 +79,7 @@ void Model::updateMatrix() {
   rotationZ.setValue(1, 0, sinZ);
   rotationZ.setValue(1, 1, cosZ);
 
+  //final multiplication: translation * rotationZ * rotationY * rotationX * scale
   mMatrix = matrixMultMatrix(
     matrixMultMatrix(
       matrixMultMatrix(

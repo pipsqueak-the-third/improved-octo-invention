@@ -22,45 +22,43 @@
 int main(int argc, char **argv) {
 
 
-    // Dimensionen des Ergebnisbildes im Konstruktor setzen
-    std::shared_ptr<Image> img = std::make_shared<Image>(640, 480);
+  // Dimensionen des Ergebnisbildes im Konstruktor setzen
+  std::shared_ptr<Image> img = std::make_shared<Image>(640, 480);
 
-    // Verwendete Modelle festlegen
-    std::vector<std::string> path_vector;
-    path_vector.push_back(std::string("../data/bunny/bunny_scaled.ply"));
-    path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
-    // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
-    auto scene = std::make_shared<Scene>();
-    scene->load(path_vector);
+  // Verwendete Modelle festlegen
+  std::vector<std::string> path_vector;
+  path_vector.push_back(std::string("../data/bunny/bunny_scaled.ply"));
+  path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
+  // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
+  auto scene = std::make_shared<Scene>();
+  scene->load(path_vector);
 
 
-    /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer */
-    WireframeRenderer wf = WireframeRenderer(scene, img);
+  /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer */
+  WireframeRenderer wf = WireframeRenderer(scene, img);
 
-    Color borderColor(0, 0, 0);
+  Color borderColor(0, 0, 0);
 
-    /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier
-
-    //Placing point c in the Center
+  /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier
+  //Placing point c in the Center
     
-    int x0 = (int) img->getWidth() / 2;
-    int y0 = (int) img->getHeight() / 2;
-    GLPoint c = GLPoint(x0, y0, 0);
-    int a = 200;
+  int x0 = (int) img->getWidth() / 2;
+  int y0 = (int) img->getHeight() / 2;
+  GLPoint c = GLPoint(x0, y0, 0);
+  int a = 200;
 
-    //Generating lines spanning every Quadrant with Euler's Formula where r*exp(iπ)=r * (cosπ-isinπ)
-    for (int n = 0; n < 16; n++) {
-        double angle = n * M_PI / 8;
-        double re = x0 + a * cos(angle);
-        double im = y0 + a * sin(angle);
-        GLPoint z = GLPoint(re, im, 0);
-        wf.drawBresenhamLine(c, z, borderColor);
-        //Closing the cirle
-        angle = (n+1) * M_PI / 8;
-        GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
-        wf.drawBresenhamLine(z, p, borderColor);
-    }
-
+  //Generating lines spanning every Quadrant with Euler's Formula where r*exp(iπ)=r * (cosπ-isinπ)
+  for (int n = 0; n < 16; n++) {
+    double angle = n * M_PI / 8;
+    double re = x0 + a * cos(angle);
+    double im = y0 + a * sin(angle);
+    GLPoint z = GLPoint(re, im, 0);
+    wf.drawBresenhamLine(c, z, borderColor);
+    //Closing the cirle
+    angle = (n+1) * M_PI / 8;
+    GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
+    wf.drawBresenhamLine(z, p, borderColor);
+  }
   */
 
   /* Aufgabenblatt 1, Aufgabe 3: Testen Sie Ihre seedFillArea-Methode hier
@@ -70,60 +68,37 @@ int main(int argc, char **argv) {
     std::uniform_real_distribution<float> distribution(0, 1);
 
     for (int n = 0;n < 16; n++) {
-        // Equation obtained solving for 0.5 * o * Zn
-        double angle = (2 * n + 1) * M_PI / 16;
-        double re = x0 - 0.5 * a * cos(angle);
-        double im = y0 + 0.5 * a * sin(angle);
+      // Equation obtained solving for 0.5 * o * Zn
+      double angle = (2 * n + 1) * M_PI / 16;
+      double re = x0 - 0.5 * a * cos(angle);
+      double im = y0 + 0.5 * a * sin(angle);
 
-        //Randomly generated RGB values
-        float r = distribution(generator);
-        float g = distribution(generator);
-        float b = distribution(generator);
-        Color fillColor(r,g,b);
+      //Randomly generated RGB values
+      float r = distribution(generator);
+      float g = distribution(generator);
+      float b = distribution(generator);
+      Color fillColor(r,g,b);
 
-        //Seed Fill Generation
-        GLPoint seed = GLPoint(re,im, 0);
-        wf.seedFillArea(seed, borderColor, fillColor);
+      //Seed Fill Generation
+      GLPoint seed = GLPoint(re,im, 0);
+      wf.seedFillArea(seed, borderColor, fillColor);
     }
   */
   
 
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die Transformationen der Modelle */
-  
-  /*Testing... Testing...
-  GLMatrix m1;
-  GLMatrix m2;
-
-  m1.setValue(0,1,3);
-  m2.setValue(0,0,2);
-  m2.setValue(1,0,4);
-
-  GLVector v1(1,2,3);
-  GLPoint p1(1,2,4);
-
-  GLMatrix m3 = matrixMultMatrix(m1, m2);
-
-  GLVector v2 = matrixMultVector(m1, v1);
-  GLPoint p2 = matrixMultPoint(m1, p1);
-
-  std::cout << m3;
-  std::cout << v2;
-  std::cout << p2;
-  */ 
-
   std::vector<Model>& models = scene->getModels();
-
   Model& bunny = models[0];
   Model& cube = models[1];
 
+  //Setting transformation for each model
   bunny.setTranslation(GLVector(200,200,0));
-  bunny.setScale(GLVector(1.5,1.5,1.5));
+  bunny.setScale(GLVector(2,2,2));
   bunny.setRotation(GLVector(0,0,0));
 
-
-  cube.setTranslation(GLVector(450,300,0));
-  cube.setScale(GLVector(1,1,1));
-  cube.setRotation(GLVector(2,2,2));
+  cube.setTranslation(GLVector(470,250,0));
+  cube.setScale(GLVector(1,3,1));
+  cube.setRotation(GLVector(0.3,0.4,0.5));
   
 
 
