@@ -29,6 +29,9 @@ int main(int argc, char **argv) {
   std::vector<std::string> path_vector;
   path_vector.push_back(std::string("../data/bunny/bunny_scaled.ply"));
   path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
+  path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
+  path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
+  path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
   // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
   auto scene = std::make_shared<Scene>();
   scene->load(path_vector);
@@ -89,21 +92,12 @@ int main(int argc, char **argv) {
   /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die Transformationen der Modelle */
   std::vector<Model>& models = scene->getModels();
   Model& bunny = models[0];
-  Model& cube = models[1];
-
-  //Setting transformation for each model
-  bunny.setTranslation(GLVector(200,200,0));
-  bunny.setScale(GLVector(2,2,2));
-  bunny.setRotation(GLVector(0,0,0));
-
-  cube.setTranslation(GLVector(470,250,0));
-  cube.setScale(GLVector(1,3,1));
-  cube.setRotation(GLVector(0.3,0.4,0.5));
-  
-
+  Model& cube1 = models[1];
+  Model& cube2 = models[2];
+  Model& cube3 = models[2];
+  Model& cube4 = models[3];
 
   /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
-  wf.renderScene(borderColor);
 
 
   /* Setup der Camera - Erst ab Aufgabenblatt 3 relevant. */
@@ -114,31 +108,62 @@ int main(int argc, char **argv) {
   // space überführt werden
   
   /* Aufgabenblatt 3:  kommentieren Sie die Zeilen wieder ein, die eine Kamera erzeugen und zur Scene hinzufügen*/
-  
-  //  auto cam = std::make_shared<Camera>();
-  //GLPoint eye = GLPoint(0.0, 0.0, 300.0);
-  //cam->setEyePoint(eye);
-  //cam->setUp(GLVector(0.0, 1.0, 0.0));
-  //GLVector viewDirection = GLVector(0.0, 0, -1.0);
-  //viewDirection.normalize();
-  //cam->setViewDirection(viewDirection);
-  //cam->setSize(img->getWidth(), img->getHeight());
-  //scene->setCamera(cam);
+  auto cam = std::make_shared<Camera>();
+  GLPoint eye = GLPoint(0.0, 0.0, 300.0);
+  cam->setEyePoint(eye);
+  cam->setUp(GLVector(0.0, 1.0, 0.0));
+  GLVector viewDirection = GLVector(0.0, 0, -1.0);
+  viewDirection.normalize();
+  cam->setViewDirection(viewDirection);
+  cam->setSize(img->getWidth(), img->getHeight());
+  scene->setCamera(cam);
 
 
   /* Aufgabenblatt 3: Erzeugen Sie mindestens eine Kugel und fügen Sie diese zur Szene hinzu*/
-    
+  Sphere sphere1, sphere2;
+  scene->addSphere(sphere1);
+  scene->addSphere(sphere2);
+
   /* Aufgabenblatt 4: Setzen Sie materialeigenschaften für die Kugelen und die Modelle. Die Materialeigenschaften für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
 
   /* Aufgabenblatt 3: (Wenn nötig) Transformationen der Modelle im World space, sodass sie von der Kamera gesehen werden könnnen. Die nötigen Transformationen für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
+  bunny.setTranslation(GLVector(0,-10,-30));
+  bunny.setScale(GLVector(1,1,1));
+  bunny.setRotation(GLVector(0,170,0));
+
+  cube1.setTranslation(GLVector(-60,-50,0));
+  cube1.setScale(GLVector(1,1,1));
+  cube1.setRotation(GLVector(0,0,0));
+
+  cube2.setTranslation(GLVector(60,50,-50));
+  cube2.setScale(GLVector(1,1,1));
+  cube2.setRotation(GLVector(0,0,0));
+  
+  cube3.setTranslation(GLVector(-80,10,-100));
+  cube3.setScale(GLVector(1,1,1));
+  cube3.setRotation(GLVector(0,0,0));
+
+  cube4.setTranslation(GLVector(0,-100,0));
+  cube4.setScale(GLVector(500,0.01,500));
+  cube4.setRotation(GLVector(0,0,0));
+  
+  sphere1.setPosition(GLPoint(-150, 0, -30));
+  sphere1.setRadius(50.0);
+
+  sphere1.setPosition(GLPoint(150, 0, -30));
+  sphere1.setRadius(50.0);
+
+  wf.renderScene(borderColor);
 
   /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
   /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
   
     
-  /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mir einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
-  
+  /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
+  std::shared_ptr<SolidRenderer> sr = std::make_shared<SolidRenderer>(scene, img, cam);
+  sr->renderRaycast();
+
   // Schreiben des Bildes in Datei
   if (argc > 1) {
     img->writeAsPPM(argv[1]);
