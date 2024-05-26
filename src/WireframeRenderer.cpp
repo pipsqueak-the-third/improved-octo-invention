@@ -45,7 +45,7 @@ void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
     int sx = x1 < x2 ? 1 : -1;
     int sy = y1 < y2 ? 1 : -1;
     //Determines the longer axis so that the error rate is err = 2 * (smaller axis) - (bigger axis)
-    int err = dx < dy ? 2 * dy - dx : 2 * dx - dy;
+    int err = dx > dy ? 2 * dy - dx : 2 * dx - dy;
     //Limits the Cycle up to the longest axis
     int limiter = (dx < dy) ? dy : dx;
     for(int i = 0; i <= limiter; i++){
