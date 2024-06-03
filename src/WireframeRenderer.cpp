@@ -7,17 +7,15 @@
 ** (Aufgabenblatt 2 - Aufgabe 1)
 **/
 void WireframeRenderer::renderScene(Color color) {
-    std::vector<Model> supermodel = mScene->getModels();
-    for(Model model : supermodel){
+    std::vector<Model> models = mScene->getModels();
+    for(Model& model : models){
         std::vector<Triangle> tri = model.mTriangles;
         for(Triangle triangle : tri){
-
             //Apply transformation
             GLPoint v0 = model.getTransformation() * triangle.vertex[0];
             GLPoint v1 = model.getTransformation() * triangle.vertex[1];
             GLPoint v2 = model.getTransformation() * triangle.vertex[2];
-
-            //Draws tranformed vertices
+            //Draws transformed vertices
             drawBresenhamLine(v0, v1, color);
             drawBresenhamLine(v0, v2, color);
             drawBresenhamLine(v1, v2, color);

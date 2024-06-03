@@ -28,6 +28,7 @@
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/sphere.ply");
     // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
     auto scene = std::make_shared<Scene>();
     scene->load(path_vector);
@@ -57,7 +58,6 @@
     wf.drawBresenhamLine(z, p, borderColor);
     }
     */
-
     /* Aufgabenblatt 1, Aufgabe 3: Testen Sie Ihre seedFillArea-Methode hier
 
     //Random Number Generator (set outside to prevent issues experienced before)
@@ -89,6 +89,8 @@
     Model& cube2 = models[2];
     Model& cube3 = models[2];
     Model& cube4 = models[3];
+    Model& cube5 = models[4];
+    Model& sphere1 = models[5];
 
     /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
 
@@ -101,26 +103,30 @@
 
     /* Aufgabenblatt 3: kommentieren Sie die Zeilen wieder ein, die eine Kamera erzeugen und zur Scene hinzufügen*/
     auto cam = std::make_shared<Camera>();
-    GLPoint eye = GLPoint(0.0, 0.0, 0.0);
+    GLPoint eye = GLPoint(0.0, 0.0, 300.0);
     cam->setEyePoint(eye);
-    cam->setUp(GLVector(0.0, 0.0, 0.0));
-    GLVector viewDirection = GLVector(0.0, 0.0, 0.0);
+    cam->setUp(GLVector(0.0, 1.0, 0.0));
+    GLVector viewDirection = GLVector(0.0, 0.0, -1.0);
     viewDirection.normalize();
     cam->setViewDirection(viewDirection);
     cam->setSize(img->getWidth(), img->getHeight());
     scene->setCamera(cam);
     cam->print();
+    cam->update();
+    cam->print();
 
     /* Aufgabenblatt 3: Erzeugen Sie mindestens eine Kugel und fügen Sie diese zur Szene hinzu*/
-    Sphere sphere1, sphere2;
-    scene->addSphere(sphere1);
-    scene->addSphere(sphere2);
-    Material material = Material();
-    material.color = borderColor;
+    Sphere sphere2 = Sphere();
 
-    /* Aufgabenblatt 4: Setzen Sie materialeigenschaften für die Kugelen und die Modelle. Die Materialeigenschaften für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
+    sphere2.setPosition(GLPoint(150, 120, 0));
+    sphere2.setRadius(100.0);
+
+    scene->addSphere(sphere2);
+
+    /* Aufgabenblatt 4: Setzen Sie materialeigenschaften für die Kügeln und die Modelle. Die Materialeigenschaften für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
 
     /* Aufgabenblatt 3: (Wenn nötig) Transformationen der Modelle im World space, sodass sie von der Kamera gesehen werden könnnen. Die nötigen Transformationen für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
+
     bunny.setTranslation(GLVector(300,200,-50));
     bunny.setScale(GLVector(1,1,1));
     bunny.setRotation(GLVector(-0.3,-0.3,0));
@@ -131,7 +137,7 @@
 
     //cube2 stuck.
     cube2.setTranslation(GLVector(300,350,0));
-    cube2.setScale(GLVector(1,1,1));
+    cube2.setScale(GLVector(-0.1,-0.3,1));
     cube2.setRotation(GLVector(0,0,0));
 
     cube3.setTranslation(GLVector(300,50,0));
@@ -142,14 +148,10 @@
     cube4.setScale(GLVector(1,1,1));
     cube4.setRotation(GLVector(0,0,0));
 
-    sphere1.setMaterial(material);
-    sphere1.setPosition(GLPoint(100, 300, -30));
-    sphere1.setRadius(50.0);
+    sphere1.setTranslation(GLVector(100,100,100));
+    sphere1.setScale(GLVector(50,50,50));
 
-    sphere2.setPosition(GLPoint(150, 0, -30));
-    sphere2.setRadius(50.0);
-
-    /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
+        /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
 
