@@ -13,9 +13,9 @@ void WireframeRenderer::renderScene(Color color) {
         for(Triangle triangle : tri){
 
             //Apply transformation
-            GLPoint v0 = matrixMultPoint(model.getTransformation(), triangle.vertex[0]);
-            GLPoint v1 = matrixMultPoint(model.getTransformation(), triangle.vertex[1]);
-            GLPoint v2 = matrixMultPoint(model.getTransformation(), triangle.vertex[2]);
+            GLPoint v0 = model.getTransformation() * triangle.vertex[0];
+            GLPoint v1 = model.getTransformation() * triangle.vertex[1];
+            GLPoint v2 = model.getTransformation() * triangle.vertex[2];
 
             //Draws tranformed vertices
             drawBresenhamLine(v0, v1, color);
@@ -48,9 +48,9 @@ void WireframeRenderer::drawBresenhamLine(GLPoint p1, GLPoint p2, Color color) {
     int err = dx > dy ? 2 * dy - dx : 2 * dx - dy;
     //Limits the Cycle up to the longest axis
     int limiter = (dx < dy) ? dy : dx;
-    for(int i = 0; i <= limiter; i++){
+    for(int i = 0; i < limiter; i++){
         //Here taken into consideration that x is flipped as explained in Image.hpp (12)
-        mImage->setValue(x1, y1, color);
+        mImage->setValue(mImage->getWidth()-x1, y1, color);
         //Implements for shorter x-axis else y-axis implementation is used
         if (dx < dy){
             if (err < 0) {

@@ -56,7 +56,7 @@ inline int sgn(int x) { return (x > 0) ? 1 : (x < 0) ? -1 : 0; }
 /** Aufgabenblatt 2, Aufgabe 2 **/
 
 //matrix-vector-multiplication
-inline GLVector matrixMultVector(const GLMatrix &m, const GLVector &v) {
+inline GLVector operator*(const GLMatrix &m, const GLVector &v) {
   GLVector result;
   for (int i = 0; i < 4; ++i) {
       result(i) = 0.0;
@@ -68,7 +68,7 @@ inline GLVector matrixMultVector(const GLMatrix &m, const GLVector &v) {
 }
 
 //matrix-point-multiplication
-inline GLPoint matrixMultPoint(const GLMatrix &m, const GLPoint &p) {
+inline GLPoint operator*(const GLMatrix &m, const GLPoint &p) {
     GLPoint result;
   for (int i = 0; i < 3; ++i) {
     result(i) = m(i, 0) * p(0) + m(i, 1) * p(1) + m(i, 2) * p(2) + m(i, 3);
@@ -77,7 +77,7 @@ inline GLPoint matrixMultPoint(const GLMatrix &m, const GLPoint &p) {
 }
 
 //matrix-matrix-multiplication
-inline GLMatrix matrixMultMatrix(const GLMatrix &m1, const GLMatrix &m2) {
+inline GLMatrix operator*(const GLMatrix &m1, const GLMatrix &m2) {
   GLMatrix result;
   for (size_t i = 0; i < 4; ++i) {
     for (size_t j = 0; j < 4; ++j) {

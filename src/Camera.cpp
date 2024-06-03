@@ -49,7 +49,18 @@ void Camera::setSize(size_t width, size_t height) {
 }
 
 void Camera::update() {
-  // compute inverse matrices
+    GLVector view = mViewTransform.getColumn(2);
+    GLVector up = mViewTransform.getColumn(1);
+    GLVector right = crossProduct(up, view);
+    view.normalize();
+    up.normalize();
+    right.normalize();
+    mViewTransform.setColumn(0, right);
+    mViewTransform.setColumn(1, up);
+    mViewTransform.setColumn(2, view);
+    mViewTransform.setColumn(3, getEyePoint());
+    mInvViewTransform = mViewTransform;
+    mInvViewTransform.inverse();
 }
 
 Ray Camera::getRay(int x, int y) const {
