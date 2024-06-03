@@ -18,17 +18,16 @@
 #include "SolidRenderer.hpp"
 #include "WireframeRenderer.hpp"
 #include "math.hpp"
-
     int main(int argc, char **argv) {
     // Dimensionen des Ergebnisbildes im Konstruktor setzen
     std::shared_ptr<Image> img = std::make_shared<Image>(640, 480);
     // Verwendete Modelle festlegen
     std::vector<std::string> path_vector;
-    path_vector.push_back(std::string("../data/bunny/bunny_scaled.ply"));
-    path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
-    path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
-    path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
-    path_vector.push_back(std::string("../data/basicObjects/cube_scaled.ply"));
+    path_vector.emplace_back("../data/bunny/bunny_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
     auto scene = std::make_shared<Scene>();
     scene->load(path_vector);
@@ -83,7 +82,6 @@
     }
     */
 
-
     /* Aufgabenblatt 2, Aufgabe 3: Setzen Sie die Transformationen der Modelle */
     std::vector<Model>& models = scene->getModels();
     Model& bunny = models[0];
@@ -94,7 +92,6 @@
 
     /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
 
-
     /* Setup der Camera - Erst ab Aufgabenblatt 3 relevant. */
     // Diese Einstellungen beziehen sich auf den world space
     // Beachten Sie, dass Sie in diesem Praktikum keine explizite Umwandlung in
@@ -104,10 +101,10 @@
 
     /* Aufgabenblatt 3: kommentieren Sie die Zeilen wieder ein, die eine Kamera erzeugen und zur Scene hinzufügen*/
     auto cam = std::make_shared<Camera>();
-    GLPoint eye = GLPoint(0.0, 0.0, 300.0);
+    GLPoint eye = GLPoint(0.0, 0.0, 0.0);
     cam->setEyePoint(eye);
-    cam->setUp(GLVector(0.0, 0.0, 200.0));
-    GLVector viewDirection = GLVector(0.0, 0, -1.0);
+    cam->setUp(GLVector(0.0, 0.0, 0.0));
+    GLVector viewDirection = GLVector(0.0, 0.0, 0.0);
     viewDirection.normalize();
     cam->setViewDirection(viewDirection);
     cam->setSize(img->getWidth(), img->getHeight());
@@ -126,22 +123,23 @@
     /* Aufgabenblatt 3: (Wenn nötig) Transformationen der Modelle im World space, sodass sie von der Kamera gesehen werden könnnen. Die nötigen Transformationen für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
     bunny.setTranslation(GLVector(300,200,-50));
     bunny.setScale(GLVector(1,1,1));
-    bunny.setRotation(GLVector(100,170,0));
+    bunny.setRotation(GLVector(-0.3,-0.3,0));
 
-    cube1.setTranslation(GLVector(-60,-50,0));
+    cube1.setTranslation(GLVector(100,200,0));
     cube1.setScale(GLVector(1,1,1));
-    cube1.setRotation(GLVector(0,0,0));
+    cube1.setRotation(GLVector(0.5,0.5,0));
 
-    cube2.setTranslation(GLVector(60,50,-50));
+    //cube2 stuck.
+    cube2.setTranslation(GLVector(300,350,0));
     cube2.setScale(GLVector(1,1,1));
     cube2.setRotation(GLVector(0,0,0));
 
-    cube3.setTranslation(GLVector(-80,10,-100));
+    cube3.setTranslation(GLVector(300,50,0));
     cube3.setScale(GLVector(1,1,1));
     cube3.setRotation(GLVector(0,0,0));
 
-    cube4.setTranslation(GLVector(0,-100,0));
-    cube4.setScale(GLVector(500,0.01,500));
+    cube4.setTranslation(GLVector(500,200,0));
+    cube4.setScale(GLVector(1,1,1));
     cube4.setRotation(GLVector(0,0,0));
 
     sphere1.setMaterial(material);
@@ -155,12 +153,10 @@
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
 
-
     /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
     //std::shared_ptr<SolidRenderer> sr = std::make_shared<SolidRenderer>(scene, img, cam);
     //sr->renderRaycast();
 
-    cam->update();
     wf.renderScene(borderColor);
 
     // Schreiben des Bildes in Datei

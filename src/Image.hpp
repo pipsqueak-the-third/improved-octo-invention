@@ -1,12 +1,10 @@
 #pragma once
-
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <vector>
 
 #include "Color.hpp"
-
 /**
 ** Repräsentiert ein Bild mit den Maßen mWidth und mHeight
 ** Der Punkt (0,0) liegt hierbei unten rechts
