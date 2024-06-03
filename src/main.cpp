@@ -27,7 +27,6 @@
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
-    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/sphere.ply");
     // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
     auto scene = std::make_shared<Scene>();
@@ -87,10 +86,8 @@
     Model& bunny = models[0];
     Model& cube1 = models[1];
     Model& cube2 = models[2];
-    Model& cube3 = models[2];
-    Model& cube4 = models[3];
-    Model& cube5 = models[4];
-    Model& sphere1 = models[5];
+    Model& cube3 = models[3];
+    Model& sphere1 = models[4];
 
     /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
 
@@ -133,25 +130,20 @@
 
     cube1.setTranslation(GLVector(100,200,0));
     cube1.setScale(GLVector(1,1,1));
-    cube1.setRotation(GLVector(0.5,0.5,0));
+    cube1.setRotation(GLVector(0,0,0));
 
-    //cube2 stuck.
-    cube2.setTranslation(GLVector(300,350,0));
-    cube2.setScale(GLVector(-0.1,-0.3,1));
+    cube2.setTranslation(GLVector(500,200,0));
+    cube2.setScale(GLVector(1,1,1));
     cube2.setRotation(GLVector(0,0,0));
 
     cube3.setTranslation(GLVector(300,50,0));
     cube3.setScale(GLVector(1,1,1));
     cube3.setRotation(GLVector(0,0,0));
 
-    cube4.setTranslation(GLVector(500,200,0));
-    cube4.setScale(GLVector(1,1,1));
-    cube4.setRotation(GLVector(0,0,0));
-
-    sphere1.setTranslation(GLVector(100,100,100));
+    sphere1.setTranslation(GLVector(300,400,100));
     sphere1.setScale(GLVector(50,50,50));
 
-        /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
+    /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
 
