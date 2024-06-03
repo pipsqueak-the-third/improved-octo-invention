@@ -60,7 +60,7 @@ void Camera::update() {
     mViewTransform.setColumn(0, right);
     mViewTransform.setColumn(1, up);
     mViewTransform.setColumn(2, view);
-    mViewTransform.setColumn(3, getEyePoint());
+    mViewTransform.setColumn(3, GLVector(getEyePoint().x, getEyePoint().y, getEyePoint.z, 1.0));
 
     mInvViewTransform = mViewTransform;
     mInvViewTransform.inverse();
