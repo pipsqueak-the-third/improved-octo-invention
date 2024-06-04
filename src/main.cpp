@@ -27,14 +27,13 @@
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
-    path_vector.emplace_back("../data/basicObjects/sphere.ply");
     // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
     auto scene = std::make_shared<Scene>();
     scene->load(path_vector);
 
     /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer */
     WireframeRenderer wf = WireframeRenderer(scene, img);
-    Color borderColor(0, 0, 0);
+    Color color(0, 0, 0);
 
     /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier
     //Placing point c in the Center
@@ -50,11 +49,11 @@
     double re = x0 + a * cos(angle);
     double im = y0 + a * sin(angle);
     GLPoint z = GLPoint(re, im, 0);
-    wf.drawBresenhamLine(c, z, borderColor);
+    wf.drawBresenhamLine(c, z, color);
     //Closing the cirle
     angle = (n+1) * M_PI / 8;
     GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
-    wf.drawBresenhamLine(z, p, borderColor);
+    wf.drawBresenhamLine(z, p, color);
     }
     */
     /* Aufgabenblatt 1, Aufgabe 3: Testen Sie Ihre seedFillArea-Methode hier
@@ -77,7 +76,7 @@
 
       //Seed Fill Generation
       GLPoint seed = GLPoint(re,im, 0);
-      wf.seedFillArea(seed, borderColor, fillColor);
+      wf.seedFillArea(seed, color, fillColor);
     }
     */
 
@@ -87,7 +86,6 @@
     Model& cube1 = models[1];
     Model& cube2 = models[2];
     Model& cube3 = models[3];
-    Model& sphere1 = models[4];
 
     /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
 
@@ -108,16 +106,16 @@
     cam->setViewDirection(viewDirection);
     cam->setSize(img->getWidth(), img->getHeight());
     scene->setCamera(cam);
-    cam->print();
-    cam->update();
-    cam->print();
 
     /* Aufgabenblatt 3: Erzeugen Sie mindestens eine Kugel und fügen Sie diese zur Szene hinzu*/
-    Sphere sphere2 = Sphere();
+    Sphere sphere1 = Sphere();
+    sphere1.setPosition(GLPoint(150, 120, 0));
+    sphere1.setRadius(100.0);
+    scene->addSphere(sphere1);
 
+    Sphere sphere2 = Sphere();
     sphere2.setPosition(GLPoint(150, 120, 0));
     sphere2.setRadius(100.0);
-
     scene->addSphere(sphere2);
 
     /* Aufgabenblatt 4: Setzen Sie materialeigenschaften für die Kügeln und die Modelle. Die Materialeigenschaften für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
@@ -140,18 +138,16 @@
     cube3.setScale(GLVector(1,1,1));
     cube3.setRotation(GLVector(0,0,0));
 
-    sphere1.setTranslation(GLVector(300,400,100));
-    sphere1.setScale(GLVector(50,50,50));
-
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
 
     /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
-    //std::shared_ptr<SolidRenderer> sr = std::make_shared<SolidRenderer>(scene, img, cam);
-    //sr->renderRaycast();
 
-    wf.renderScene(borderColor);
+    std::shared_ptr<SolidRenderer> sr = std::make_shared<SolidRenderer>(scene, img, cam);
+    sr->renderRaycast();
+
+    wf.renderScene(color);
 
     // Schreiben des Bildes in Datei
     if (argc > 1) {
