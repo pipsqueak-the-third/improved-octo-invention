@@ -45,7 +45,19 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
 */
 bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
                             HitRecord &hitRecord, const float epsilon) {
-    return false; // Platzhalter; entfernen bei der Implementierung
+  // Probably need to change something with the hitRecord. I dunno. Don't fully understand that yet
+  GLPoint m = sphere.getPosition();
+  float r = (float)sphere.getRadius();
+  GLPoint e = ray.origin;
+  GLVector v = ray.direction;
+
+  float a = dotProduct(v, v);
+  float b = -2 * dotProduct(v, e-m);
+  float c = dotProduct(e-m, e-m) * pow(r, 2);
+
+  float t = b*b - 4*a*c;
+
+  return (t >= 0);
 }
 
 /**
