@@ -31,9 +31,11 @@
     auto scene = std::make_shared<Scene>();
     scene->load(path_vector);
 
-    /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer */
-    WireframeRenderer wf = WireframeRenderer(scene, img);
     Color color(0, 0, 0);
+
+    /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer
+    WireframeRenderer wf = WireframeRenderer(scene, img);
+    */
 
     /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier
     //Placing point c in the Center
@@ -146,8 +148,6 @@
 
     std::shared_ptr<SolidRenderer> sr = std::make_shared<SolidRenderer>(scene, img, cam);
     sr->renderRaycast();
-
-    wf.renderScene(color);
 
     // Schreiben des Bildes in Datei
     if (argc > 1) {

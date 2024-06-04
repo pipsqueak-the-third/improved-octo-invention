@@ -18,6 +18,15 @@ Scene::Scene() {}
  */
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
+    for (Sphere sphere : mSpheres) {
+      sphereIntersect(ray, sphere, hitRecord, epsilon);
+    }
+
+    for (Model model : mModels) {
+      for (Triangle triangle : model.mTriangles) {
+        triangleIntersect(ray, triangle, hitRecord, epsilon);
+      }
+    }
     return false; // Platzhalter; entfernen bei der Implementierung
 }
 
