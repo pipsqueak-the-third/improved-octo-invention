@@ -19,7 +19,7 @@ void SolidRenderer::renderRaycast() {
   // Ohne parallelisierung:
     
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
-          computeImageRow( i );
+      computeImageRow( i );
    }
 
   //  Parallelisierung mit OpenMP:
@@ -37,6 +37,24 @@ void SolidRenderer::renderRaycast() {
  * Precondition: Sowohl mImage, mScene und mCamera  müssen gesetzt sein.
  */
 void SolidRenderer::computeImageRow(size_t rowNumber) {
+    //Rendering for every pixel in the x-axis given the y-axis location (rowNumber)
+    for (int i = 0; i < mImage->getWidth(); i++) {
+        //Found the way to initialize the ray inside the Camera.cpp (55)
+        Ray ray = mCamera->getRay(i, (int)rowNumber);
+        // initializing the HitRecord as instructed in structs.hpp(20)
+        HitRecord hr;
+        //Not sure how to initialize Color properly
+        hr.color = Color(0,0,0);
+        hr.parameter = i - mCamera->getEyePoint()(1);
+        hr.triangleId = -1;
+        hr.sphereId = -1;
+        //Checking intersection
+        if (mScene->intersect(ray,hr,EPSILON)){
+            mImage->setValue(i, (int)rowNumber, hr.color);
+        } else {
+            mImage->setValue(i,(int)rowNumber,Color(1,1,1));
+        }
+    }
 }
 
 /**

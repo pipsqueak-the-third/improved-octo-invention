@@ -27,16 +27,15 @@
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
     auto scene = std::make_shared<Scene>();
     scene->load(path_vector);
 
-    Color color(0, 0, 0);
-
     /* Aufgabenblatt 1: Instanziieren Sie einen WireframeRenderer
     WireframeRenderer wf = WireframeRenderer(scene, img);
+    Color color(0, 0, 0);
     */
-
     /* Aufgabenblatt 1, Aufgabe 2: Testen Sie Ihre drawBresenhamLine-Methode hier
     //Placing point c in the Center
 
@@ -47,15 +46,15 @@
 
     //Generating lines spanning every Quadrant with Euler's Formula where r*exp(iπ)=r * (cosπ-isinπ)
     for (int n = 0; n < 16; n++) {
-    double angle = n * M_PI / 8;
-    double re = x0 + a * cos(angle);
-    double im = y0 + a * sin(angle);
-    GLPoint z = GLPoint(re, im, 0);
-    wf.drawBresenhamLine(c, z, color);
-    //Closing the cirle
-    angle = (n+1) * M_PI / 8;
-    GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
-    wf.drawBresenhamLine(z, p, color);
+        double angle = n * M_PI / 8;
+        double re = x0 + a * cos(angle);
+        double im = y0 + a * sin(angle);
+        GLPoint z = GLPoint(re, im, 0);
+        wf.drawBresenhamLine(c, z, color);
+        //Closing the cirle
+        angle = (n+1) * M_PI / 8;
+        GLPoint p = GLPoint(x0 + a * cos(angle), y0 + a * sin(angle), 0);
+        wf.drawBresenhamLine(z, p, color);
     }
     */
     /* Aufgabenblatt 1, Aufgabe 3: Testen Sie Ihre seedFillArea-Methode hier
@@ -88,13 +87,14 @@
     Model& cube1 = models[1];
     Model& cube2 = models[2];
     Model& cube3 = models[3];
+    Model& cube4 = models[4];
 
     /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
 
     /* Setup der Camera - Erst ab Aufgabenblatt 3 relevant. */
     // Diese Einstellungen beziehen sich auf den world space
     // Beachten Sie, dass Sie in diesem Praktikum keine explizite Umwandlung in
-    // den ViewSpace benötigen, da die Strahen für Raycasting und Raytracing im
+    // den ViewSpace benötigen, da die Strahlen für Raycasting und Raytracing im
     // World space definiert sind. Modelle müssen also lediglich in den World
     // space überführt werden
 
@@ -111,13 +111,13 @@
 
     /* Aufgabenblatt 3: Erzeugen Sie mindestens eine Kugel und fügen Sie diese zur Szene hinzu*/
     Sphere sphere1 = Sphere();
-    sphere1.setPosition(GLPoint(150, 120, 0));
-    sphere1.setRadius(100.0);
+    sphere1.setPosition(GLPoint(-150, 0, -30));
+    sphere1.setRadius(50.0);
     scene->addSphere(sphere1);
 
     Sphere sphere2 = Sphere();
-    sphere2.setPosition(GLPoint(150, 120, 0));
-    sphere2.setRadius(100.0);
+    sphere2.setPosition(GLPoint(150, 0, -30));
+    sphere2.setRadius(50.0);
     scene->addSphere(sphere2);
 
     /* Aufgabenblatt 4: Setzen Sie materialeigenschaften für die Kügeln und die Modelle. Die Materialeigenschaften für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
@@ -128,17 +128,21 @@
     bunny.setScale(GLVector(1,1,1));
     bunny.setRotation(GLVector(-0.3,-0.3,0));
 
-    cube1.setTranslation(GLVector(100,200,0));
+    cube1.setTranslation(GLVector(-60,-50,0));
     cube1.setScale(GLVector(1,1,1));
     cube1.setRotation(GLVector(0,0,0));
 
-    cube2.setTranslation(GLVector(500,200,0));
+    cube2.setTranslation(GLVector(60,50,-50));
     cube2.setScale(GLVector(1,1,1));
     cube2.setRotation(GLVector(0,0,0));
 
-    cube3.setTranslation(GLVector(300,50,0));
+    cube3.setTranslation(GLVector(-80,10,-100));
     cube3.setScale(GLVector(1,1,1));
     cube3.setRotation(GLVector(0,0,0));
+
+    cube4.setTranslation(GLVector(0,-100,0));
+    cube4.setScale(GLVector(500,0.01,500));
+    cube4.setRotation(GLVector(0,0,0));
 
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
@@ -148,6 +152,8 @@
 
     std::shared_ptr<SolidRenderer> sr = std::make_shared<SolidRenderer>(scene, img, cam);
     sr->renderRaycast();
+
+    //wf.renderScene(color);
 
     // Schreiben des Bildes in Datei
     if (argc > 1) {

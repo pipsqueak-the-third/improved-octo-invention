@@ -1,4 +1,3 @@
-
 #include "GLVector.hpp"
 
 #include <cmath>
