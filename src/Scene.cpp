@@ -19,12 +19,15 @@ Scene::Scene() {}
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
     for (Sphere sphere : mSpheres) {
-      sphereIntersect(ray, sphere, hitRecord, epsilon);
+      if (sphereIntersect(ray, sphere, hitRecord, epsilon)){
+          return true;
+      }
     }
-
     for (Model model : mModels) {
       for (Triangle triangle : model.mTriangles) {
-        triangleIntersect(ray, triangle, hitRecord, epsilon);
+        if(triangleIntersect(ray, triangle, hitRecord, epsilon)) {
+            return true;
+        }
       }
     }
     return false; // Platzhalter; entfernen bei der Implementierung
@@ -36,7 +39,25 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
  */
 bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
                               HitRecord &hitRecord, const float epsilon) {
-    return false; // Platzhalter; entfernen bei der Implementierung
+    //Setting up Barycentric Coordinates to determine whether the point lies inside the triangle
+    GLVector v0 = (GLVector)(triangle.vertex(1) - triangle.vertex(0));
+    GLVector v1 = (GLVector)(triangle.vertex(2) - triangle.vertex(1));
+    GLVector v2 = (GLVector)(triangle.vertex(2) - triangle.vertex(0));
+    //Found this implementation and decided it makes the most sense
+    //https://ceng2.ktu.edu.tr/~cakir/files/grafikler/Texture_Mapping.pdf
+    double d00 = dotProduct(v0,v0);
+    double d01 = dotProduct(v0,v1);
+    double d02 = dotProduct(v0,v2);
+    double d11 = dotProduct(v1,v1);
+    double d12 = dotProduct(v1,v2);
+    double d22 = dotProduct(v2,v2);
+
+    double denom = d00 * d11 - d01 * d01;
+    double v = (d11 * d02 - d01 * d12) / denom;
+    double w = (d00 * d12 - d01 * d02) / denom;
+    double u = 1 - v - w;
+
+    return (v >= 0) && (w >= 0) && (v + w <= 1);
 }
 
 /** Aufgabenblatt 3: Gibt zurück ob ein gegebener Strahl eine Kugel der Szene trifft
@@ -55,7 +76,7 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
   float b = -2 * dotProduct(v, e-m);
   float c = dotProduct(e-m, e-m) * pow(r, 2);
 
-  float t = b*b - 4*a*c;
+  float t = b * b - 4*a*c;
 
   return (t >= 0);
 }
