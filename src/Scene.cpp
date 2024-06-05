@@ -45,19 +45,21 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     GLVector v2 = (GLVector)(triangle.vertex(2) - triangle.vertex(0));
     //Found this implementation and decided it makes the most sense
     //https://ceng2.ktu.edu.tr/~cakir/files/grafikler/Texture_Mapping.pdf
-    double d00 = dotProduct(v0,v0);
-    double d01 = dotProduct(v0,v1);
-    double d02 = dotProduct(v0,v2);
-    double d11 = dotProduct(v1,v1);
-    double d12 = dotProduct(v1,v2);
-    double d22 = dotProduct(v2,v2);
+    float d00 = (float) dotProduct(v0,v0);
+    float d01 = (float) dotProduct(v0,v1);
+    float d02 = (float) dotProduct(v0,v2);
+    float d11 = (float) dotProduct(v1,v1);
+    float d12 = (float) dotProduct(v1,v2);
+    float d22 = (float) dotProduct(v2,v2);
 
-    double denom = d00 * d11 - d01 * d01;
-    double v = (d11 * d02 - d01 * d12) / denom;
-    double w = (d00 * d12 - d01 * d02) / denom;
-    double u = 1 - v - w;
+    float denom = d00 * d11 - d01 * d01;
+    float v = (d11 * d02 - d01 * d12) / denom;
+    float w = (d00 * d12 - d01 * d02) / denom;
+    float u = 1 - v - w;
 
-    return (v >= 0) && (w >= 0) && (v + w <= 1);
+    //Changed from the previous implementation (written below), into one that uses epsilon to fix inconsistencies
+    //return (v >= 0) && (w >= 0) && (v + w <= 1);
+    return (v >= -epsilon) && (w >= -epsilon) && (v + w <= 1 + epsilon);
 }
 
 /** Aufgabenblatt 3: Gibt zurück ob ein gegebener Strahl eine Kugel der Szene trifft
@@ -78,7 +80,8 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
 
   float t = b * b - 4*a*c;
 
-  return (t >= 0);
+  //Added epsilon as a small fix
+  return (t >= -epsilon);
 }
 
 /**
