@@ -11,7 +11,6 @@
 
 Scene::Scene() {}
 
-
 /**
  * Gibt zurück ob ein gegebener Strahl ein Objekt (Modell oder Kugel) der Szene trifft
  *  (Aufgabenblatt 3)
@@ -40,9 +39,10 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
 bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
                               HitRecord &hitRecord, const float epsilon) {
     //Setting up Barycentric Coordinates to determine whether the point lies inside the triangle
-    GLVector v0 = (GLVector)(triangle.vertex(1) - triangle.vertex(0));
-    GLVector v1 = (GLVector)(triangle.vertex(2) - triangle.vertex(1));
-    GLVector v2 = (GLVector)(triangle.vertex(2) - triangle.vertex(0));
+    GLVector v0 = (GLVector)(triangle.vertex[1] - triangle.vertex[0]);
+    GLVector v1 = (GLVector)(triangle.vertex[2] - triangle.vertex[1]);
+    GLVector v2 = (GLVector)(triangle.vertex[2] - triangle.vertex[0]);
+
     //Found this implementation and decided it makes the most sense
     //https://ceng2.ktu.edu.tr/~cakir/files/grafikler/Texture_Mapping.pdf
     float d00 = (float) dotProduct(v0,v0);
@@ -50,12 +50,10 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     float d02 = (float) dotProduct(v0,v2);
     float d11 = (float) dotProduct(v1,v1);
     float d12 = (float) dotProduct(v1,v2);
-    float d22 = (float) dotProduct(v2,v2);
 
     float denom = d00 * d11 - d01 * d01;
     float v = (d11 * d02 - d01 * d12) / denom;
     float w = (d00 * d12 - d01 * d02) / denom;
-    float u = 1 - v - w;
 
     //Changed from the previous implementation (written below), into one that uses epsilon to fix inconsistencies
     //return (v >= 0) && (w >= 0) && (v + w <= 1);

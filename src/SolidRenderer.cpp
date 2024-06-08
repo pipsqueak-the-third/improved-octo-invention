@@ -17,19 +17,16 @@ void SolidRenderer::renderRaycast() {
   // Parallelisierbarkeit zu verbessern
 
   // Ohne parallelisierung:
-    
+  /*
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
       computeImageRow( i );
-   }
-
+  }
+  */
   //  Parallelisierung mit OpenMP:
-    
-  //#pragma omp parallel for
-  //    for(size_t i = 0; i < mImage->getHeight(); ++i )
-  //    {
-  //        computeImageRow( i );
-  //    }
-
+  #pragma omp parallel for
+  for(size_t i = 0; i < mImage->getHeight(); ++i ){
+    computeImageRow( i );
+  }
 }
 
 /**
@@ -44,7 +41,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
         // initializing the HitRecord as instructed in structs.hpp(20)
         HitRecord hr;
         //Not sure how to initialize Color properly
-        hr.color = Color(0,0,0);
+        hr.color =
         hr.parameter = i - mCamera->getEyePoint()(1);
         hr.triangleId = -1;
         hr.sphereId = -1;

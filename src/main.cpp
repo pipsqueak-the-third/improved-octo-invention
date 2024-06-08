@@ -144,6 +144,23 @@
     cube4.setScale(GLVector(500,0.01,500));
     cube4.setRotation(GLVector(0,0,0));
 
+    //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
+    Material bunny_material, cube1_material, cube2_material, cube3_material, cube4_material, sphere1_material, sphere2_material = Material();
+    bunny_material.color = Color(0,1,0);
+    bunny.setMaterial(bunny_material);
+    cube1_material.color = Color(0.9,0.9,0.3);
+    cube1.setMaterial(cube1_material);
+    cube2_material.color = Color(0.9,0.4,0.3);
+    cube2.setMaterial(cube2_material);
+    cube3_material.color = Color(1,0,0);
+    cube3.setMaterial(cube3_material);
+    cube4_material.color = Color(0.9,0.9,0.9);
+    cube4.setMaterial(cube4_material);
+    sphere1_material.color = Color(0,0,1);
+    sphere1.setMaterial(sphere1_material);
+    sphere2_material.color = Color(0,1,1);
+    sphere2.setMaterial(sphere2_material);
+
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
