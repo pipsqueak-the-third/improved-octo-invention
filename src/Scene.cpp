@@ -17,13 +17,14 @@ Scene::Scene() {}
  */
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
-    for (Sphere sphere : mSpheres) {
-      if (sphereIntersect(ray, sphere, hitRecord, epsilon)){
+    for (int i = 0; i < mSpheres.size(); i++) {
+      if (sphereIntersect(ray, mSpheres[i], hitRecord, epsilon)){
+          hitRecord.sphereId = i;
           return true;
       }
     }
     for (Model model : mModels) {
-      for (Triangle triangle : model.mTriangles) {
+      for (int i = 0; i < ) {
         if(triangleIntersect(ray, triangle, hitRecord, epsilon)) {
             return true;
         }

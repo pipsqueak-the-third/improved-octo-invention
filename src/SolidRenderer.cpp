@@ -41,7 +41,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
         // initializing the HitRecord as instructed in structs.hpp(20)
         HitRecord hr;
         //Not sure how to initialize Color properly
-        hr.color =
+        hr.color = Color(1,1,1);
         hr.parameter = i - mCamera->getEyePoint()(1);
         hr.triangleId = -1;
         hr.sphereId = -1;
@@ -49,7 +49,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
         if (mScene->intersect(ray,hr,EPSILON)){
             mImage->setValue(i, (int)rowNumber, hr.color);
         } else {
-            mImage->setValue(i,(int)rowNumber,Color(1,1,1));
+            mImage->setValue(i,(int)rowNumber,hr.color);
         }
     }
 }
