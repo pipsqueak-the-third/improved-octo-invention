@@ -17,15 +17,20 @@ Scene::Scene() {}
  */
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
-    for (int i = 0; i < mSpheres.size(); i++) {
-      if (sphereIntersect(ray, mSpheres[i], hitRecord, epsilon)){
-          hitRecord.sphereId = i;
+    for (int sphere_id = 0; sphere_id < mSpheres.size(); sphere_id++) {
+      if (sphereIntersect(ray, mSpheres[sphere_id], hitRecord, epsilon)){
+          hitRecord.sphereId = sphere_id;
+          hitRecord.color = mSpheres[sphere_id].getMaterial().color;
+          hitRecord.print();
           return true;
       }
     }
-    for (Model model : mModels) {
-      for (int i = 0; i < ) {
-        if(triangleIntersect(ray, triangle, hitRecord, epsilon)) {
+    for (int model_id = 0; model_id < mModels.size(); model_id++) {
+      for (int triangle_id = 0; triangle_id < mModels[model_id].mTriangles.size(); triangle_id++) {
+        if(triangleIntersect(ray, mModels[model_id].mTriangles[triangle_id], hitRecord, epsilon)) {
+            hitRecord.modelId = model_id;
+            hitRecord.triangleId = triangle_id;
+            hitRecord.print();
             return true;
         }
       }

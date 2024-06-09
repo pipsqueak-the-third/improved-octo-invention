@@ -17,18 +17,17 @@ void SolidRenderer::renderRaycast() {
   // Parallelisierbarkeit zu verbessern
 
   // Ohne parallelisierung:
-  /*
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
       computeImageRow( i );
   }
-  */
+  /*
   //  Parallelisierung mit OpenMP:
   #pragma omp parallel for
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
     computeImageRow( i );
   }
+  */
 }
-
 /**
  * Aufgabenblatt 3: Hier wird das Raycasting implementiert. Siehe Aufgabenstellung!
  * Precondition: Sowohl mImage, mScene und mCamera  müssen gesetzt sein.
@@ -43,8 +42,10 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
         //Not sure how to initialize Color properly
         hr.color = Color(1,1,1);
         hr.parameter = i - mCamera->getEyePoint()(1);
-        hr.triangleId = -1;
+        hr.modelId = -1;
         hr.sphereId = -1;
+        hr.triangleId = -1;
+
         //Checking intersection
         if (mScene->intersect(ray,hr,EPSILON)){
             mImage->setValue(i, (int)rowNumber, hr.color);
