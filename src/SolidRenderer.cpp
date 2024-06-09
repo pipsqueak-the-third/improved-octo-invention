@@ -48,7 +48,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
 
         //Checking intersection
         if (mScene->intersect(ray,hr,EPSILON)){
-            mImage->setValue(i, (int)rowNumber, hr.color);
+            shade(hr);
         } else {
             mImage->setValue(i,(int)rowNumber,hr.color);
         }
@@ -59,4 +59,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
  *  Aufgabenblatt 4: Hier wird das raytracing implementiert. Siehe Aufgabenstellung!
  */
 void SolidRenderer::shade(HitRecord &r) {
+    int x = (int) r.intersectionPoint(0);
+    int y = (int) r.intersectionPoint(1);
+    mImage->setValue(x,y,r.color);
 }

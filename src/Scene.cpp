@@ -19,18 +19,30 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
     for (int sphere_id = 0; sphere_id < mSpheres.size(); sphere_id++) {
       if (sphereIntersect(ray, mSpheres[sphere_id], hitRecord, epsilon)){
+          if (hitRecord.sphereId != -1){
+              //Check z location to know which sphere is closer to cam
+              double old_dis2cam = mSpheres[hitRecord.sphereId].getPosition()(2) - mCamera->getEyePoint()(2);
+              double new_dis2cam = mSpheres[sphere_id].getPosition()(2) - mCamera->getEyePoint()(2);
+              if (old_dis2cam < new_dis2cam){
+                  hitRecord.color = mSpheres[hitRecord.sphereId].getMaterial().color;
+                  continue;
+              }
+          }
           hitRecord.sphereId = sphere_id;
-          hitRecord.color = mSpheres[sphere_id].getMaterial().color;
-          hitRecord.print();
           return true;
       }
     }
+    //Though verbose. This allows the id to be saved correctly
+    //I'm very unsure how to implement this part, gonna stick to trying to make the spheres work for now
     for (int model_id = 0; model_id < mModels.size(); model_id++) {
       for (int triangle_id = 0; triangle_id < mModels[model_id].mTriangles.size(); triangle_id++) {
         if(triangleIntersect(ray, mModels[model_id].mTriangles[triangle_id], hitRecord, epsilon)) {
+            if (hitRecord.triangleId != -1){
+                double old_dis2cam = - mCamera->getEyePoint()(2);
+                double new_dis2cam = - mCamera->getEyePoint()(2);
+            }
             hitRecord.modelId = model_id;
             hitRecord.triangleId = triangle_id;
-            hitRecord.print();
             return true;
         }
       }
