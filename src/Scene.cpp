@@ -73,7 +73,7 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     if (det < epsilon && det > -epsilon){
         return false;
     }
-    double invDet 1.0 / det;
+    double invDet = 1 / det;
     GLVector tvec = ray.origin - triangle.vertex[0];
 
     double u = dotProduct(tvec,pvec) * invDet;
@@ -91,7 +91,7 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     }
     hitRecord.parameter = t;
     hitRecord.intersectionPoint = ray.origin + t * ray.direction;
-    hitRecord.normal = (1 - u - v) * triangle.vertex[0] + u * triangle.vertex[1] + v * triangle.vertex;
+    hitRecord.normal = triangle.normal;
     hitRecord.normal.normalize();
     return true;
 }
