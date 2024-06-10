@@ -26,7 +26,6 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
           hitRecord.sphereId = sphere_id;
           hitRecord.color = mSpheres[sphere_id].getMaterial().color;
           hit = true;
-          hitRecord.printColor();
       }
       sphere_id ++;
     }
@@ -43,13 +42,10 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                                                   trans_triangle.vertex[1] - trans_triangle.vertex[2]);
         trans_triangle.normal.normalize();
 
-        hitRecord.modelId = model_id;
-        hitRecord.triangleId = triangle_id;
-        hitRecord.color = mModels[model_id].getMaterial().color;
-
           if(triangleIntersect(ray,trans_triangle, hitRecord, epsilon)) {
               hitRecord.modelId = model_id;
               hitRecord.triangleId = triangle_id;
+              hitRecord.color = mModels[model_id].getMaterial().color;
               hit = true;
           }
         triangle_id++;
