@@ -18,11 +18,11 @@ Scene::Scene() {}
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
     bool hit = false;
+
     for (int sphere_id = 0; sphere_id < mSpheres.size(); sphere_id++) {
       if (sphereIntersect(ray, mSpheres[sphere_id], hitRecord, epsilon)){
           hitRecord.sphereId = sphere_id;
-          hitRecord.modelId = -1;
-          hitRecord.triangleId = -1;
+          hitRecord.color = mSpheres[sphere_id].getMaterial().color;
           hit = true;
       }
     }
@@ -31,7 +31,8 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
         if(triangleIntersect(ray, mModels[model_id].mTriangles[triangle_id], hitRecord, epsilon)) {
             hitRecord.modelId = model_id;
             hitRecord.triangleId = triangle_id;
-            return true;
+            hitRecord.color = mModels[model_id].getMaterial().color;
+            hit = true;
         }
       }
     }
@@ -61,9 +62,17 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     double v = (d11 * d02 - d01 * d12) / denom;
     double w = (d00 * d12 - d01 * d02) / denom;
 
-    //Changed from the previous implementation (written below), into one that uses epsilon to fix inconsistencies
-    //return (v >= 0) && (w >= 0) && (v + w <= 1);
-    return (v >= -epsilon) && (w >= -epsilon) && (v + w <= 1 + epsilon);
+    if (v >= -epsilon && w >= -epsilon && (v + w) <= (1 + epsilon)) {
+        double u = 1 - v - w;
+        double t = u * triangle.vertex[0](2) + v * triangle.vertex[1](2) + w * triangle.vertex[2](2);
+        if (t > epsilon && t < hitRecord.parameter) {
+            hitRecord.parameter = t;
+            hitRecord.intersectionPoint = ray.origin + t * ray.direction;
+            hitRecord.normal = triangle.normal;
+            return true;
+        }
+    }
+    return false;
 }
 
 /** Aufgabenblatt 3: Gibt zurück ob ein gegebener Strahl eine Kugel der Szene trifft
@@ -73,8 +82,8 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
 bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
                             HitRecord &hitRecord, const float epsilon) {
   // Probably need to change something with the hitRecord. I dunno. Don't fully understand that yet
-  GLPoint m = sphere.getPosition();
   double r = sphere.getRadius();
+  GLPoint m = sphere.getPosition();
   GLPoint e = ray.origin;
   GLVector v = ray.direction;
 
@@ -91,12 +100,21 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
   double t0 = (-b - sqrt(discriminant))/(2 * a);
   double t1 = (-b + sqrt(discriminant))/(2 * a);
 
+
   if (t0 > epsilon && t0 < hitRecord.parameter){
       hitRecord.parameter = t0;
+      hitRecord.normal = (hitRecord.intersectionPoint - m)/r;
+      hitRecord.normal.normalize();
+      hitRecord.intersectionPoint = e + t0 * v;
+      hitRecord.rayDirection = ray.direction;
       return true;
   }
   if (t1 > epsilon && t1 < hitRecord.parameter){
       hitRecord.parameter = t1;
+      hitRecord.normal = (hitRecord.intersectionPoint - m)/r;
+      hitRecord.normal.normalize();
+      hitRecord.intersectionPoint = e + t1 * v;
+      hitRecord.rayDirection = ray.direction;
       return true;
   }
   return false;

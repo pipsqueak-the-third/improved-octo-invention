@@ -89,3 +89,8 @@ inline GLMatrix operator*(const GLMatrix &m1, const GLMatrix &m2) {
   }
   return result;
 }
+
+//Scalar division was needed as an implementation idea, but I'm not even sure if that's a necessary thing
+inline GLVector operator/(const GLVector& vec, double scalar) {
+    return GLVector(vec(0) / scalar, vec(1) / scalar, vec(2) / scalar);
+}

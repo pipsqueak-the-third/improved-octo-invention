@@ -17,16 +17,14 @@ void SolidRenderer::renderRaycast() {
   // Parallelisierbarkeit zu verbessern
 
   // Ohne parallelisierung:
-  for(size_t i = 0; i < mImage->getHeight(); ++i ){
-      computeImageRow( i );
-  }
-  /*
+  //for(size_t i = 0; i < mImage->getHeight(); ++i ){
+  //    computeImageRow( i );
+  //}
   //  Parallelisierung mit OpenMP:
   #pragma omp parallel for
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
     computeImageRow( i );
   }
-  */
 }
 /**
  * Aufgabenblatt 3: Hier wird das Raycasting implementiert. Siehe Aufgabenstellung!
@@ -37,20 +35,19 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
     for (size_t columnNumber = 0; columnNumber < mImage->getWidth(); columnNumber++) {
         //Found the way to initialize the ray inside the Camera.cpp (55)
         Ray ray = mCamera->getRay( (int)columnNumber, (int)rowNumber);
+
         // initializing the HitRecord as instructed in structs.hpp(20)
         HitRecord hr;
-        //Not sure how to initialize Color properly
         hr.color = Color(0,0,0);
-        hr.parameter = sqrt(pow((double)columnNumber - mCamera->getEyePoint()(0),2) +
-                pow((double)rowNumber - mCamera->getEyePoint()(1),2));
+        hr.parameter = std::numeric_limits<double>::max(); //Initialized to a large value
         hr.modelId = -1;
         hr.sphereId = -1;
         hr.triangleId = -1;
 
         //Checking intersection
         if (mScene->intersect(ray,hr,EPSILON)){
-            mImage->setValue((int)columnNumber,(int)rowNumber,hr.color);
             shade(hr);
+            mImage->setValue((int)columnNumber,(int)rowNumber,hr.color);
         } else {
             mImage->setValue((int)columnNumber,(int)rowNumber,Color(1,1,1));
         }
@@ -61,7 +58,10 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
  *  Aufgabenblatt 4: Hier wird das raytracing implementiert. Siehe Aufgabenstellung!
  */
 void SolidRenderer::shade(HitRecord &r) {
-    int x = (int) r.intersectionPoint(0);
-    int y = (int) r.intersectionPoint(1);
-    mImage->setValue(x,y,r.color);
+    if (r.modelId != -1){
+        r.color = mScene->getModels()[r.modelId].getMaterial().color;
+    }
+    if (r.sphereId != -1){
+        r.color = mScene->getSpheres()[r.sphereId].getMaterial().color;
+    }
 }
