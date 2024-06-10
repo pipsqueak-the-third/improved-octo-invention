@@ -145,7 +145,10 @@
     cube4.setRotation(GLVector(0,0,0));
 
     //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
-    Material bunny_material, cube1_material, cube2_material, cube3_material, cube4_material, sphere1_material, sphere2_material = Material();
+    Material bunny_material,
+    cube1_material, cube2_material, cube3_material, cube4_material,
+    sphere1_material, sphere2_material;
+
     bunny_material.color = Color(0,1,0);
     bunny.setMaterial(bunny_material);
 

@@ -33,14 +33,12 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
       for (Triangle triangle : model.mTriangles) {
         //Transforming Triangle
         Triangle trans_triangle = Triangle();
-
+        trans_triangle.normal = crossProduct(trans_triangle.vertex[0] - trans_triangle.vertex[2],
+                                               trans_triangle.vertex[1] - trans_triangle.vertex[2]);
+        trans_triangle.normal.normalize();
         trans_triangle.vertex[0] = model.getTransformation() * triangle.vertex[0];
         trans_triangle.vertex[1] = model.getTransformation() * triangle.vertex[1];
         trans_triangle.vertex[2] = model.getTransformation() * triangle.vertex[2];
-
-        trans_triangle.normal = crossProduct(trans_triangle.vertex[0] - trans_triangle.vertex[2],
-                                                  trans_triangle.vertex[1] - trans_triangle.vertex[2]);
-        trans_triangle.normal.normalize();
 
           if(triangleIntersect(ray,trans_triangle, hitRecord, epsilon)) {
               hitRecord.modelId = model_id;

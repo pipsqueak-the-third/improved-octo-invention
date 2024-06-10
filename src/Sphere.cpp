@@ -1,4 +1,3 @@
-
 #include "Sphere.hpp"
 
 void Sphere::setMaterial(Material material) {
