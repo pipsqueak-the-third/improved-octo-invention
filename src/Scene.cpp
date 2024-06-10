@@ -25,7 +25,7 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
       if (sphereIntersect(ray,sphere, hitRecord, epsilon)){
           hitRecord.sphereId = sphere_id;
           hitRecord.color = mSpheres[sphere_id].getMaterial().color;
-          hitRecord.print();
+          hit = true;
       }
       sphere_id ++;
     }
@@ -55,7 +55,7 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
       }
       model_id++;
     }
-    return hit; // Platzhalter; entfernen bei der Implementierung
+    return hit;
 }
 
 /** Aufgabenblatt 3: Gibt zurück ob ein gegebener Strahl ein Dreieck  eines Modells der Szene trifft
@@ -81,18 +81,20 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     double v = (d11 * d02 - d01 * d12) / denom;
     double w = (d00 * d12 - d01 * d02) / denom;
 
-    if (v >= -epsilon && w >= -epsilon && (v + w) <= (1 + epsilon)) {
-        double u = 1 - v - w;
-        double t = u * triangle.vertex[0](2) + v * triangle.vertex[1](2) + w * triangle.vertex[2](2);
-        if (t > epsilon && t < hitRecord.parameter) {
-            hitRecord.parameter = t;
-            hitRecord.intersectionPoint = ray.origin + t * ray.direction;
-            hitRecord.normal = triangle.normal;
-            return true;
-        }
+    if (v < -epsilon || w < -epsilon || v + w > 1 + epsilon){
+        return false;
     }
-    return false;
+    double u = 1 - v - w;
+    double t = u * triangle.vertex[0](2) + v * triangle.vertex[1](2) + w * triangle.vertex[2](2);
+    if (t < epsilon || t > hitRecord.parameter){
+        return false;
+    }
+    hitRecord.parameter = t;
+    hitRecord.intersectionPoint = ray.origin + t * ray.direction;
+    hitRecord.normal = triangle.normal;
+    return true;
 }
+
 
 /** Aufgabenblatt 3: Gibt zurück ob ein gegebener Strahl eine Kugel der Szene trifft
  *  Diese Methode sollte in Scene::intersect für jede Kugel aufgerufen werden
@@ -134,6 +136,7 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
           m - hitRecord.intersectionPoint:
           hitRecord.intersectionPoint - m;
   hitRecord.normal.normalize();
+
   return true;
 }
 
