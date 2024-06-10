@@ -64,34 +64,35 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
  */
 bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
                               HitRecord &hitRecord, const float epsilon) {
-    //Setting up Barycentric Coordinates to determine whether the point lies inside the triangle
-    GLVector v0 = (GLVector)(triangle.vertex[1] - triangle.vertex[0]);
-    GLVector v1 = (GLVector)(triangle.vertex[2] - triangle.vertex[1]);
-    GLVector v2 = (GLVector)(triangle.vertex[2] - triangle.vertex[0]);
+    //New Implementation based on https://en.wikipedia.org/wiki/Möller–Trumbore_intersection_algorithm
+    GLVector edge1 = triangle.vertex[1] - triangle.vertex[0];
+    GLVector edge2 = triangle.vertex[2] - triangle.vertex[0];
+    GLVector pvec = crossProduct(ray.direction, edge2);
 
-    //Found this implementation and decided it makes the most sense
-    //https://ceng2.ktu.edu.tr/~cakir/files/grafikler/Texture_Mapping.pdf
-    double d00 = dotProduct(v0,v0);
-    double d01 = dotProduct(v0,v1);
-    double d02 = dotProduct(v0,v2);
-    double d11 = dotProduct(v1,v1);
-    double d12 = dotProduct(v1,v2);
-
-    double denom = d00 * d11 - d01 * d01;
-    double v = (d11 * d02 - d01 * d12) / denom;
-    double w = (d00 * d12 - d01 * d02) / denom;
-
-    if (v < -epsilon || w < -epsilon || v + w > 1 + epsilon){
+    double det = dotProduct(edge1, pvec);
+    if (det < epsilon && det > -epsilon){
         return false;
     }
-    double u = 1 - v - w;
-    double t = u * triangle.vertex[0](2) + v * triangle.vertex[1](2) + w * triangle.vertex[2](2);
-    if (t < epsilon || t > hitRecord.parameter){
+    double invDet 1.0 / det;
+    GLVector tvec = ray.origin - triangle.vertex[0];
+
+    double u = dotProduct(tvec,pvec) * invDet;
+    if (u < 0 || u > 1){
+        return false;
+    }
+    GLVector qvec = crossProduct(tvec, edge1);
+    double v = dotProduct(ray.direction, qvec) * invDet;
+    if (v < 0 || u + v > 1){
+        return false;
+    }
+    double t = dotProduct(edge2,qvec) * invDet;
+    if (t <= epsilon || t >= hitRecord.parameter){
         return false;
     }
     hitRecord.parameter = t;
     hitRecord.intersectionPoint = ray.origin + t * ray.direction;
-    hitRecord.normal = triangle.normal;
+    hitRecord.normal = (1 - u - v) * triangle.vertex[0] + u * triangle.vertex[1] + v * triangle.vertex;
+    hitRecord.normal.normalize();
     return true;
 }
 
