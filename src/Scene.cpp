@@ -25,6 +25,7 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
       if (sphereIntersect(ray,sphere, hitRecord, epsilon)){
           hitRecord.sphereId = sphere_id;
           hitRecord.color = mSpheres[sphere_id].getMaterial().color;
+          hitRecord.print();
       }
       sphere_id ++;
     }
@@ -133,7 +134,6 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
           m - hitRecord.intersectionPoint:
           hitRecord.intersectionPoint - m;
   hitRecord.normal.normalize();
-  hitRecord.print();
   return true;
 }
 
