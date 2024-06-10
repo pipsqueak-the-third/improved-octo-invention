@@ -46,9 +46,8 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
 
         //Checking intersection
         if (mScene->intersect(ray,hr,EPSILON)){
-            shade(hr);
+           // shade(hr);
             mImage->setValue((int)columnNumber,(int)rowNumber,hr.color);
-            hr.printColor();
         } else {
             mImage->setValue((int)columnNumber,(int)rowNumber,Color(1,1,1));
         }

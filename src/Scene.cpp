@@ -26,6 +26,7 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
           hitRecord.sphereId = sphere_id;
           hitRecord.color = mSpheres[sphere_id].getMaterial().color;
           hit = true;
+          hitRecord.printColor();
       }
       sphere_id ++;
     }
