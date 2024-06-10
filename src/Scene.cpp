@@ -18,23 +18,41 @@ Scene::Scene() {}
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
     bool hit = false;
-
-    for (int sphere_id = 0; sphere_id < mSpheres.size(); sphere_id++) {
-      if (sphereIntersect(ray, mSpheres[sphere_id], hitRecord, epsilon)){
+    int sphere_id = 0;
+    int model_id = 0;
+    int triangle_id = 0;
+    for (Sphere sphere : mSpheres) {
+      if (sphereIntersect(ray,sphere, hitRecord, epsilon)){
           hitRecord.sphereId = sphere_id;
           hitRecord.color = mSpheres[sphere_id].getMaterial().color;
-          hit = true;
       }
+      sphere_id ++;
     }
-    for (int model_id = 0; model_id < mModels.size(); model_id++) {
-      for (int triangle_id = 0; triangle_id < mModels[model_id].mTriangles.size(); triangle_id++) {
-        if(triangleIntersect(ray, mModels[model_id].mTriangles[triangle_id], hitRecord, epsilon)) {
-            hitRecord.modelId = model_id;
-            hitRecord.triangleId = triangle_id;
-            hitRecord.color = mModels[model_id].getMaterial().color;
-            hit = true;
-        }
+    for (Model model : mModels) {
+      for (Triangle triangle : model.mTriangles) {
+        //Transforming Triangle
+        Triangle trans_triangle = Triangle();
+
+        trans_triangle.vertex[0] = model.getTransformation() * triangle.vertex[0];
+        trans_triangle.vertex[1] = model.getTransformation() * triangle.vertex[1];
+        trans_triangle.vertex[2] = model.getTransformation() * triangle.vertex[2];
+
+        trans_triangle.normal = crossProduct(trans_triangle.vertex[0] - trans_triangle.vertex[2],
+                                                  trans_triangle.vertex[1] - trans_triangle.vertex[2]);
+        trans_triangle.normal.normalize();
+
+        hitRecord.modelId = model_id;
+        hitRecord.triangleId = triangle_id;
+        hitRecord.color = mModels[model_id].getMaterial().color;
+
+          if(triangleIntersect(ray,trans_triangle, hitRecord, epsilon)) {
+              hitRecord.modelId = model_id;
+              hitRecord.triangleId = triangle_id;
+              hit = true;
+          }
+        triangle_id++;
       }
+      model_id++;
     }
     return hit; // Platzhalter; entfernen bei der Implementierung
 }
@@ -88,8 +106,8 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
   GLVector v = ray.direction;
 
   double a = dotProduct(v, v);
-  double b = -2 * dotProduct(v, e-m);
-  double c = dotProduct(e-m, e-m) * pow(r, 2);
+  double b = 2 * dotProduct(v, e-m);
+  double c = (e-m, e-m).norm2() - pow(r, 2);
 
   //We obviously remove the possibility of any imaginary values
   double discriminant = b * b - 4 * a * c;
@@ -100,24 +118,23 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
   double t0 = (-b - sqrt(discriminant))/(2 * a);
   double t1 = (-b + sqrt(discriminant))/(2 * a);
 
+  if (t0 < epsilon || t1 < epsilon){
+      return false;
+  }
+  if (t0 > hitRecord.parameter || t1 > hitRecord.parameter){
+      return false;
+  }
+  double t = t0 < t1 ? t0 : t1;
+  hitRecord.parameter = t;
+  hitRecord.intersectionPoint = e + t * v;
+  hitRecord.rayDirection = ray.direction;
 
-  if (t0 > epsilon && t0 < hitRecord.parameter){
-      hitRecord.parameter = t0;
-      hitRecord.normal = (hitRecord.intersectionPoint - m)/r;
-      hitRecord.normal.normalize();
-      hitRecord.intersectionPoint = e + t0 * v;
-      hitRecord.rayDirection = ray.direction;
-      return true;
-  }
-  if (t1 > epsilon && t1 < hitRecord.parameter){
-      hitRecord.parameter = t1;
-      hitRecord.normal = (hitRecord.intersectionPoint - m)/r;
-      hitRecord.normal.normalize();
-      hitRecord.intersectionPoint = e + t1 * v;
-      hitRecord.rayDirection = ray.direction;
-      return true;
-  }
-  return false;
+  hitRecord.normal = (e - m).norm() < r ?
+          m - hitRecord.intersectionPoint:
+          hitRecord.intersectionPoint - m;
+  hitRecord.normal.normalize();
+  hitRecord.print();
+  return true;
 }
 
 /**

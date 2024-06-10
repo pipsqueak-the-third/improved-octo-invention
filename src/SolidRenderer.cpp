@@ -35,7 +35,6 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
     for (size_t columnNumber = 0; columnNumber < mImage->getWidth(); columnNumber++) {
         //Found the way to initialize the ray inside the Camera.cpp (55)
         Ray ray = mCamera->getRay( (int)columnNumber, (int)rowNumber);
-
         // initializing the HitRecord as instructed in structs.hpp(20)
         HitRecord hr;
         hr.color = Color(0,0,0);
@@ -43,11 +42,13 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
         hr.modelId = -1;
         hr.sphereId = -1;
         hr.triangleId = -1;
+        hr.recursions = 0;
 
         //Checking intersection
         if (mScene->intersect(ray,hr,EPSILON)){
             shade(hr);
             mImage->setValue((int)columnNumber,(int)rowNumber,hr.color);
+            shade(hr);
         } else {
             mImage->setValue((int)columnNumber,(int)rowNumber,Color(1,1,1));
         }
@@ -61,7 +62,7 @@ void SolidRenderer::shade(HitRecord &r) {
     if (r.modelId != -1){
         r.color = mScene->getModels()[r.modelId].getMaterial().color;
     }
-    if (r.sphereId != -1){
+    else if (r.sphereId != -1){
         r.color = mScene->getSpheres()[r.sphereId].getMaterial().color;
     }
 }
