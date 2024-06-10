@@ -100,7 +100,7 @@
 
     /* Aufgabenblatt 3: kommentieren Sie die Zeilen wieder ein, die eine Kamera erzeugen und zur Scene hinzufügen*/
     auto cam = std::make_shared<Camera>();
-    GLPoint eye = GLPoint(0.0, 0.0, 300.0);
+    GLPoint eye = GLPoint(0.0, 0.0, 200.0);
     cam->setEyePoint(eye);
     cam->setUp(GLVector(0.0, 1.0, 0.0));
     GLVector viewDirection = GLVector(0.0, 0.0, -1.0);
@@ -124,9 +124,9 @@
 
     /* Aufgabenblatt 3: (Wenn nötig) Transformationen der Modelle im World space, sodass sie von der Kamera gesehen werden könnnen. Die nötigen Transformationen für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
 
-    bunny.setTranslation(GLVector(300,200,-50));
+    bunny.setTranslation(GLVector(0,-10,-30));
     bunny.setScale(GLVector(1,1,1));
-    bunny.setRotation(GLVector(-0.3,-0.3,0));
+    bunny.setRotation(GLVector(0,0,0));
 
     cube1.setTranslation(GLVector(-60,-50,0));
     cube1.setScale(GLVector(1,1,1));
