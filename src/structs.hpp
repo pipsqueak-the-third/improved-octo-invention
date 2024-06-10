@@ -41,7 +41,8 @@ struct HitRecord {
               << " with normal " << normal << std::endl;
   }
     void printColor() const {
-        std::cout << "Color: r = " <<  color.r << ", g = " << color.g << ", b = " << color.b << std::endl;
+        std::cout << "Color of Model " << modelId << " or Sphere " << sphereId
+        << ": r = " << color.r << ", g = " << color.g << ", b = " << color.b << std::endl;
     }
 };
 
