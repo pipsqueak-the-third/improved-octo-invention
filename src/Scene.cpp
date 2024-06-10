@@ -21,14 +21,15 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
     int sphere_id = 0;
     int model_id = 0;
     int triangle_id = 0;
+
     for (Sphere sphere : mSpheres) {
       if (sphereIntersect(ray,sphere, hitRecord, epsilon)){
           hitRecord.sphereId = sphere_id;
-          hitRecord.color = mSpheres[sphere_id].getMaterial().color;
           hit = true;
       }
       sphere_id ++;
     }
+
     for (Model model : mModels) {
       for (Triangle triangle : model.mTriangles) {
         //Transforming Triangle
@@ -43,7 +44,6 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
           if(triangleIntersect(ray,trans_triangle, hitRecord, epsilon)) {
               hitRecord.modelId = model_id;
               hitRecord.triangleId = triangle_id;
-              hitRecord.color = mModels[model_id].getMaterial().color;
               hit = true;
           }
         triangle_id++;
@@ -68,22 +68,25 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     if (det < epsilon && det > -epsilon){
         return false;
     }
+
     double invDet = 1 / det;
     GLVector tvec = ray.origin - triangle.vertex[0];
-
     double u = dotProduct(tvec,pvec) * invDet;
     if (u < 0 || u > 1){
         return false;
     }
+
     GLVector qvec = crossProduct(tvec, edge1);
     double v = dotProduct(ray.direction, qvec) * invDet;
     if (v < 0 || u + v > 1){
         return false;
     }
+
     double t = dotProduct(edge2,qvec) * invDet;
     if (t <= epsilon || t >= hitRecord.parameter){
         return false;
     }
+
     hitRecord.parameter = t;
     hitRecord.intersectionPoint = ray.origin + t * ray.direction;
     hitRecord.normal = triangle.normal;
@@ -132,7 +135,6 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
           m - hitRecord.intersectionPoint:
           hitRecord.intersectionPoint - m;
   hitRecord.normal.normalize();
-
   return true;
 }
 

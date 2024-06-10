@@ -165,10 +165,10 @@
     cube4.setMaterial(cube4_material);
 
     sphere1_material.color = Color(0,0,1);
-    sphere1.setMaterial(sphere1_material);
+    scene->getSpheres()[0].setMaterial(sphere1_material);
 
     sphere2_material.color = Color(0,1,1);
-    sphere2.setMaterial(sphere2_material);
+    scene->getSpheres()[1].setMaterial(sphere2_material);
 
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 

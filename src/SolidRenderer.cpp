@@ -21,9 +21,10 @@ void SolidRenderer::renderRaycast() {
   //    computeImageRow( i );
   //}
   //  Parallelisierung mit OpenMP:
+  printf("%f", mScene->getSpheres()[0].getMaterial().color.b);
   #pragma omp parallel for
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
-    computeImageRow( i );
+      computeImageRow( i );
   }
 }
 /**
