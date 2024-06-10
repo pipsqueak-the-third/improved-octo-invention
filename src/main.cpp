@@ -126,7 +126,7 @@
 
     bunny.setTranslation(GLVector(0,-10,-30));
     bunny.setScale(GLVector(1,1,1));
-    bunny.setRotation(GLVector(0,0,0));
+    bunny.setRotation(GLVector(0,110,0));
 
     cube1.setTranslation(GLVector(-60,-50,0));
     cube1.setScale(GLVector(1,1,1));
