@@ -34,23 +34,25 @@ void SolidRenderer::renderRaycast() {
  */
 void SolidRenderer::computeImageRow(size_t rowNumber) {
     //Rendering for every pixel in the x-axis given the y-axis location (rowNumber)
-    for (int i = 0; i < mImage->getWidth(); i++) {
+    for (size_t columnNumber = 0; columnNumber < mImage->getWidth(); columnNumber++) {
         //Found the way to initialize the ray inside the Camera.cpp (55)
-        Ray ray = mCamera->getRay(i, (int)rowNumber);
+        Ray ray = mCamera->getRay( (int)columnNumber, (int)rowNumber);
         // initializing the HitRecord as instructed in structs.hpp(20)
         HitRecord hr;
         //Not sure how to initialize Color properly
-        hr.color = Color(1,1,1);
-        hr.parameter = i - mCamera->getEyePoint()(1);
+        hr.color = Color(0,0,0);
+        hr.parameter = sqrt(pow((double)columnNumber - mCamera->getEyePoint()(0),2) +
+                pow((double)rowNumber - mCamera->getEyePoint()(1),2));
         hr.modelId = -1;
         hr.sphereId = -1;
         hr.triangleId = -1;
 
         //Checking intersection
         if (mScene->intersect(ray,hr,EPSILON)){
+            mImage->setValue((int)columnNumber,(int)rowNumber,hr.color);
             shade(hr);
         } else {
-            mImage->setValue(i,(int)rowNumber,hr.color);
+            mImage->setValue((int)columnNumber,(int)rowNumber,Color(1,1,1));
         }
     }
 }

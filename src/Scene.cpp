@@ -17,37 +17,25 @@ Scene::Scene() {}
  */
 bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
                       const float epsilon) {
+    bool hit = false;
     for (int sphere_id = 0; sphere_id < mSpheres.size(); sphere_id++) {
       if (sphereIntersect(ray, mSpheres[sphere_id], hitRecord, epsilon)){
-          if (hitRecord.sphereId != -1){
-              //Check z location to know which sphere is closer to cam
-              double old_dis2cam = mSpheres[hitRecord.sphereId].getPosition()(2) - mCamera->getEyePoint()(2);
-              double new_dis2cam = mSpheres[sphere_id].getPosition()(2) - mCamera->getEyePoint()(2);
-              if (old_dis2cam < new_dis2cam){
-                  hitRecord.color = mSpheres[hitRecord.sphereId].getMaterial().color;
-                  continue;
-              }
-          }
           hitRecord.sphereId = sphere_id;
-          return true;
+          hitRecord.modelId = -1;
+          hitRecord.triangleId = -1;
+          hit = true;
       }
     }
-    //Though verbose. This allows the id to be saved correctly
-    //I'm very unsure how to implement this part, gonna stick to trying to make the spheres work for now
     for (int model_id = 0; model_id < mModels.size(); model_id++) {
       for (int triangle_id = 0; triangle_id < mModels[model_id].mTriangles.size(); triangle_id++) {
         if(triangleIntersect(ray, mModels[model_id].mTriangles[triangle_id], hitRecord, epsilon)) {
-            if (hitRecord.triangleId != -1){
-                double old_dis2cam = - mCamera->getEyePoint()(2);
-                double new_dis2cam = - mCamera->getEyePoint()(2);
-            }
             hitRecord.modelId = model_id;
             hitRecord.triangleId = triangle_id;
             return true;
         }
       }
     }
-    return false; // Platzhalter; entfernen bei der Implementierung
+    return hit; // Platzhalter; entfernen bei der Implementierung
 }
 
 /** Aufgabenblatt 3: Gibt zurück ob ein gegebener Strahl ein Dreieck  eines Modells der Szene trifft
@@ -63,15 +51,15 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
 
     //Found this implementation and decided it makes the most sense
     //https://ceng2.ktu.edu.tr/~cakir/files/grafikler/Texture_Mapping.pdf
-    float d00 = (float) dotProduct(v0,v0);
-    float d01 = (float) dotProduct(v0,v1);
-    float d02 = (float) dotProduct(v0,v2);
-    float d11 = (float) dotProduct(v1,v1);
-    float d12 = (float) dotProduct(v1,v2);
+    double d00 = dotProduct(v0,v0);
+    double d01 = dotProduct(v0,v1);
+    double d02 = dotProduct(v0,v2);
+    double d11 = dotProduct(v1,v1);
+    double d12 = dotProduct(v1,v2);
 
-    float denom = d00 * d11 - d01 * d01;
-    float v = (d11 * d02 - d01 * d12) / denom;
-    float w = (d00 * d12 - d01 * d02) / denom;
+    double denom = d00 * d11 - d01 * d01;
+    double v = (d11 * d02 - d01 * d12) / denom;
+    double w = (d00 * d12 - d01 * d02) / denom;
 
     //Changed from the previous implementation (written below), into one that uses epsilon to fix inconsistencies
     //return (v >= 0) && (w >= 0) && (v + w <= 1);
@@ -86,18 +74,32 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
                             HitRecord &hitRecord, const float epsilon) {
   // Probably need to change something with the hitRecord. I dunno. Don't fully understand that yet
   GLPoint m = sphere.getPosition();
-  float r = (float)sphere.getRadius();
+  double r = sphere.getRadius();
   GLPoint e = ray.origin;
   GLVector v = ray.direction;
 
-  float a = dotProduct(v, v);
-  float b = -2 * dotProduct(v, e-m);
-  float c = dotProduct(e-m, e-m) * pow(r, 2);
+  double a = dotProduct(v, v);
+  double b = -2 * dotProduct(v, e-m);
+  double c = dotProduct(e-m, e-m) * pow(r, 2);
 
-  float t = b * b - 4*a*c;
+  //We obviously remove the possibility of any imaginary values
+  double discriminant = b * b - 4 * a * c;
+  if (discriminant < epsilon){
+      return false;
+  }
 
-  //Added epsilon as a small fix
-  return (t >= -epsilon);
+  double t0 = (-b - sqrt(discriminant))/(2 * a);
+  double t1 = (-b + sqrt(discriminant))/(2 * a);
+
+  if (t0 > epsilon && t0 < hitRecord.parameter){
+      hitRecord.parameter = t0;
+      return true;
+  }
+  if (t1 > epsilon && t1 < hitRecord.parameter){
+      hitRecord.parameter = t1;
+      return true;
+  }
+  return false;
 }
 
 /**
