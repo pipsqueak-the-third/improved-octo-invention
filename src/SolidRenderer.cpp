@@ -48,7 +48,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
         if (mScene->intersect(ray,hr,EPSILON)){
             shade(hr);
             mImage->setValue((int)columnNumber,(int)rowNumber,hr.color);
-            shade(hr);
+            hr.printColor();
         } else {
             mImage->setValue((int)columnNumber,(int)rowNumber,Color(1,1,1));
         }

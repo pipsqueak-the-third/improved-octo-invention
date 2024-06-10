@@ -40,6 +40,9 @@ struct HitRecord {
               << intersectionPoint(1) << ", " << intersectionPoint(2)
               << " with normal " << normal << std::endl;
   }
+    void printColor() const {
+        std::cout << "Color: r = " <<  color.r << ", g = " << color.g << ", b = " << color.b << std::endl;
+    }
 };
 
 struct Triangle {
