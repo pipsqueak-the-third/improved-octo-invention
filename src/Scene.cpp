@@ -34,8 +34,8 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
       for (Triangle triangle : model.mTriangles) {
         //Transforming Triangle
         Triangle trans_triangle = Triangle();
-        trans_triangle.normal = crossProduct(trans_triangle.vertex[0] - trans_triangle.vertex[2],
-                                               trans_triangle.vertex[1] - trans_triangle.vertex[2]);
+        trans_triangle.normal = crossProduct(trans_triangle.vertex[1] - trans_triangle.vertex[0],
+                                               trans_triangle.vertex[2] - trans_triangle.vertex[0]);
         trans_triangle.normal.normalize();
         trans_triangle.vertex[0] = model.getTransformation() * triangle.vertex[0];
         trans_triangle.vertex[1] = model.getTransformation() * triangle.vertex[1];
@@ -107,18 +107,17 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
   GLPoint e = ray.origin;
   GLVector v = ray.direction;
 
-  double a = dotProduct(v, v);
   double b = 2 * dotProduct(v, e-m);
   double c = (e-m, e-m).norm2() - pow(r, 2);
 
   //We obviously remove the possibility of any imaginary values
-  double discriminant = b * b - 4 * a * c;
+  double discriminant = b * b - 4 * c;
   if (discriminant < epsilon){
       return false;
   }
 
-  double t0 = (-b - sqrt(discriminant))/(2 * a);
-  double t1 = (-b + sqrt(discriminant))/(2 * a);
+  double t0 = (-b - sqrt(discriminant))/2;
+  double t1 = (-b + sqrt(discriminant))/2;
 
   if (t0 < epsilon || t1 < epsilon){
       return false;
