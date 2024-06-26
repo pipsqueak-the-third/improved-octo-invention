@@ -41,13 +41,17 @@ inline GLVector operator-(const GLPoint &p1, const GLPoint &p2) {
   return GLVector(p1(0) - p2(0), p1(1) - p2(1), p1(2) - p2(2));
 }
 
+inline GLVector operator-(const GLVector &p1, const GLVector &p2) {
+  return GLVector(p1(0) - p2(0), p1(1) - p2(1), p1(2) - p2(2));
+}
+
 inline GLVector crossProduct(const GLVector &lhs, const GLVector &rhs) {
   return GLVector(lhs(1) * rhs(2) - lhs(2) * rhs(1),
                   lhs(2) * rhs(0) - lhs(0) * rhs(2),
                   lhs(0) * rhs(1) - lhs(1) * rhs(0));
 }
 
-inline double dotProduct(const GLVector &lhs, const GLVector &rhs) {
+inline double operator*(const GLVector &lhs, const GLVector &rhs) {
   return lhs(0) * rhs(0) + lhs(1) * rhs(1) + lhs(2) * rhs(2);
 }
 

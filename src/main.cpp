@@ -28,6 +28,7 @@
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
+    path_vector.emplace_back("../data/basicObjects/cube_scaled.ply");
     // Erzeuge die Szene mit dem default Konstruktor und lade die Modelle
     auto scene = std::make_shared<Scene>();
     scene->load(path_vector);
@@ -88,6 +89,7 @@
     Model& cube2 = models[2];
     Model& cube3 = models[3];
     Model& cube4 = models[4];
+    Model& cube5 = models[5];
 
     /* Aufgabenblatt 2, Aufgabe 1: Rufen Sie Ihre renderScene-Methode hier auf */
 
@@ -111,24 +113,31 @@
 
     /* Aufgabenblatt 3: Erzeugen Sie mindestens eine Kugel und fügen Sie diese zur Szene hinzu*/
     Sphere sphere1 = Sphere();
-    sphere1.setPosition(GLPoint(-150, 0, -30));
+    sphere1.setPosition(GLPoint(-150, 50, -30));
     sphere1.setRadius(50.0);
     scene->addSphere(sphere1);
 
     Sphere sphere2 = Sphere();
-    sphere2.setPosition(GLPoint(150, 0, -30));
+    sphere2.setPosition(GLPoint(150, -50, -30));
     sphere2.setRadius(50.0);
     scene->addSphere(sphere2);
 
     /* Aufgabenblatt 4: Setzen Sie materialeigenschaften für die Kügeln und die Modelle. Die Materialeigenschaften für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
+    Material bunny_material,
+    cube1_material, cube2_material, cube3_material, cube4_material, cube5_material,
+    sphere1_material, sphere2_material;
 
+    bunny_material.reflection = 1.0;
+
+    sphere1_material.reflection = 1,0;
+    sphere2_material.reflection = 1.0;
     /* Aufgabenblatt 3: (Wenn nötig) Transformationen der Modelle im World space, sodass sie von der Kamera gesehen werden könnnen. Die nötigen Transformationen für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
 
-    bunny.setTranslation(GLVector(0,-10,-30));
+    bunny.setTranslation(GLVector(0,-15,-20));
     bunny.setScale(GLVector(1,1,1));
     bunny.setRotation(GLVector(0,110,0));
 
-    cube1.setTranslation(GLVector(-60,-50,0));
+    cube1.setTranslation(GLVector(-60,-50,5));
     cube1.setScale(GLVector(1,1,1));
     cube1.setRotation(GLVector(0,0,0));
 
@@ -144,35 +153,39 @@
     cube4.setScale(GLVector(500,0.01,500));
     cube4.setRotation(GLVector(0,0,0));
 
-    //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
-    Material bunny_material,
-    cube1_material, cube2_material, cube3_material, cube4_material,
-    sphere1_material, sphere2_material;
+    cube5.setTranslation(GLVector(0,0,0));
+    cube5.setScale(GLVector(500,500,500));
+    cube5.setRotation(GLVector(0,0,0));
 
-    bunny_material.color = Color(0,1,0);
+    //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
+    bunny_material.color = Color(0,0,0);
     bunny.setMaterial(bunny_material);
 
-    cube1_material.color = Color(0.9,0.9,0.3);
+    cube1_material.color = Color(0,0,1);
     cube1.setMaterial(cube1_material);
 
-    cube2_material.color = Color(0.9,0.4,0.3);
+    cube2_material.color = Color(0,1,0);
     cube2.setMaterial(cube2_material);
 
     cube3_material.color = Color(1,0,0);
     cube3.setMaterial(cube3_material);
 
-    cube4_material.color = Color(0.9,0.9,0.9);
+    cube4_material.color = Color(0,0.55,0.1);
     cube4.setMaterial(cube4_material);
 
-    sphere1_material.color = Color(0,0,1);
+    cube5_material.color = Color(0, 0.6, 1);
+    cube5.setMaterial(cube5_material);
+
+    sphere1_material.color = Color(0,0,0);
     scene->getSpheres()[0].setMaterial(sphere1_material);
 
-    sphere2_material.color = Color(0,1,1);
+    sphere2_material.color = Color(0,0,0);
     scene->getSpheres()[1].setMaterial(sphere2_material);
 
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
+    scene->addPointLight(GLPoint (0,0,0));
 
     /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
 

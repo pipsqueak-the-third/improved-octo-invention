@@ -35,7 +35,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
     //Rendering for every pixel in the x-axis given the y-axis location (rowNumber)
     for (size_t columnNumber = 0; columnNumber < mImage->getWidth(); columnNumber++) {
         //Found the way to initialize the ray inside the Camera.cpp (55)
-        Ray ray = mCamera->getRay( (int)columnNumber, (int)rowNumber);
+        Ray ray = mCamera->getRay((int)columnNumber, (int)rowNumber);
         // initializing the HitRecord as instructed in structs.hpp(20)
         HitRecord hr;
         hr.color = Color(0,0,0);
@@ -59,10 +59,33 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
  *  Aufgabenblatt 4: Hier wird das raytracing implementiert. Siehe Aufgabenstellung!
  */
 void SolidRenderer::shade(HitRecord &r) {
+
+    GLVector N = r.normal;
+    GLVector L = r.rayDirection;
+    GLVector R = 2 * (L * N) * (N - L);
+    GLVector V = GLVector(
+        (mScene->getViewPoint() - r.intersectionPoint)(0),
+        (mScene->getViewPoint() - r.intersectionPoint)(1),
+        (mScene->getViewPoint() - r.intersectionPoint)(2));
+    V.normalize();
+
+    const double k_ambient = 0.4;
+    const double k_diffuse = 0.4;
+    const double k_specular = 0.2;
+
+    double shiny = r.modelId != -1 ? mScene->getModels() [r.modelId].getMaterial().reflection : mScene->getModels()[r.sphereId].getMaterial().reflection;
+
+    double I_i = 1;
+    double I_ambient = 0.6;
+
+    double I_total = I_ambient * k_ambient + k_diffuse * I_i * (L * N) + k_specular * I_i * (R * V);
+
     if (r.modelId != -1){
-        r.color = mScene->getModels()[r.modelId].getMaterial().color;
+        r.color = (mScene->getModels()[r.modelId].getMaterial().color);
+        r.color *= I_total;
     }
     else if (r.sphereId != -1){
         r.color = mScene->getSpheres()[r.sphereId].getMaterial().color;
+        r.color *= I_total;
     }
 }

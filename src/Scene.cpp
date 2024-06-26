@@ -34,17 +34,20 @@ bool Scene::intersect(const Ray &ray, HitRecord &hitRecord,
       for (Triangle triangle : model.mTriangles) {
         //Transforming Triangle
         Triangle trans_triangle = Triangle();
-        trans_triangle.normal = crossProduct(trans_triangle.vertex[1] - trans_triangle.vertex[0],
-                                               trans_triangle.vertex[2] - trans_triangle.vertex[0]);
-        trans_triangle.normal.normalize();
+        
         trans_triangle.vertex[0] = model.getTransformation() * triangle.vertex[0];
         trans_triangle.vertex[1] = model.getTransformation() * triangle.vertex[1];
         trans_triangle.vertex[2] = model.getTransformation() * triangle.vertex[2];
+
+        trans_triangle.normal = crossProduct(trans_triangle.vertex[1] - trans_triangle.vertex[0],
+                                               trans_triangle.vertex[2] - trans_triangle.vertex[0]);
+        trans_triangle.normal.normalize();
 
           if(triangleIntersect(ray,trans_triangle, hitRecord, epsilon)) {
               hitRecord.modelId = model_id;
               hitRecord.triangleId = triangle_id;
               hit = true;
+              hitRecord.normal = trans_triangle.normal;
           }
         triangle_id++;
       }
@@ -64,25 +67,25 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     GLVector edge2 = triangle.vertex[2] - triangle.vertex[0];
     GLVector pvec = crossProduct(ray.direction, edge2);
 
-    double det = dotProduct(edge1, pvec);
+    double det = edge1 * pvec;
     if (det < epsilon && det > -epsilon){
         return false;
     }
 
     double invDet = 1 / det;
     GLVector tvec = ray.origin - triangle.vertex[0];
-    double u = dotProduct(tvec,pvec) * invDet;
+    double u = (tvec * pvec) * invDet;
     if (u < 0 || u > 1){
         return false;
     }
 
     GLVector qvec = crossProduct(tvec, edge1);
-    double v = dotProduct(ray.direction, qvec) * invDet;
+    double v = (ray.direction * qvec) * invDet;
     if (v < 0 || u + v > 1){
         return false;
     }
 
-    double t = dotProduct(edge2,qvec) * invDet;
+    double t = (edge2 * qvec) * invDet;
     if (t <= epsilon || t >= hitRecord.parameter){
         return false;
     }
@@ -91,6 +94,8 @@ bool Scene::triangleIntersect(const Ray &ray, const Triangle &triangle,
     hitRecord.intersectionPoint = ray.origin + t * ray.direction;
     hitRecord.normal = triangle.normal;
     hitRecord.normal.normalize();
+    hitRecord.rayDirection = ray.direction;
+    hitRecord.rayDirection.normalize();
     return true;
 }
 
@@ -107,7 +112,7 @@ bool Scene::sphereIntersect(const Ray &ray, const Sphere &sphere,
   GLPoint e = ray.origin;
   GLVector v = ray.direction;
 
-  double b = 2 * dotProduct(v, e-m);
+  double b = 2 * (v * (e-m));
   double c = (e-m, e-m).norm2() - pow(r, 2);
 
   //We obviously remove the possibility of any imaginary values
