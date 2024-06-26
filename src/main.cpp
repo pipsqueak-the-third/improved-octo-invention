@@ -153,12 +153,12 @@
     cube4.setScale(GLVector(500,0.01,500));
     cube4.setRotation(GLVector(0,0,0));
 
-    cube5.setTranslation(GLVector(0,0,0));
-    cube5.setScale(GLVector(100,200,100));
+    cube5.setTranslation(GLVector(0,0,-10));
+    cube5.setScale(GLVector(500,500,500));
     cube5.setRotation(GLVector(0,0,0));
 
     //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
-    bunny_material.color = Color(1,1,0);
+    bunny_material.color = Color(1,0,1);
     bunny.setMaterial(bunny_material);
 
     cube1_material.color = Color(0,0,1);
@@ -176,7 +176,7 @@
     cube5_material.color = Color(1, 1, 1);
     cube5.setMaterial(cube5_material);
 
-    sphere1_material.color = Color(0,0,0);
+    sphere1_material.color = Color(0,1,1);
     scene->getSpheres()[0].setMaterial(sphere1_material);
 
     sphere2_material.color = Color(1,1,0);

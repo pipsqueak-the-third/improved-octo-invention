@@ -75,7 +75,8 @@ void SolidRenderer::shade(HitRecord &r) {
     const double k_diffuse = 0.4;
     const double k_specular = 0.2;
 
-    double shiny = r.modelId != -1 ? mScene->getModels() [r.modelId].getMaterial().reflection : mScene->getModels()[r.sphereId].getMaterial().reflection;
+    double shiny = 20;
+    // double shiny = r.modelId != -1 ? mScene->getModels() [r.modelId].getMaterial().reflection : mScene->getModels()[r.sphereId].getMaterial().reflection;
 
     double I_i = 1;
     double I_ambient = 0.7;
