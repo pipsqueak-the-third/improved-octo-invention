@@ -71,7 +71,7 @@ void SolidRenderer::shade(HitRecord &r) {
     L.normalize();
 
     //reflection vector
-    GLVector R = 2 * ((L * N) * N) - L;
+    GLVector R = (2 * ((L * N) * N)) - L;
     R.normalize();
 
     //viewpoint vector
@@ -89,7 +89,7 @@ void SolidRenderer::shade(HitRecord &r) {
     double n = 20;
 
     //idk man
-    double I_i = 1;
+    double I_i = 1.2;
     double I_ambient = 1;
 
     //calculates intensity that gets multiplied to color
