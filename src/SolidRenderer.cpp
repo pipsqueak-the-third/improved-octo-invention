@@ -63,7 +63,7 @@ void SolidRenderer::shade(HitRecord &r) {
     GLVector N = r.normal;
     GLVector L = GLVector(-r.rayDirection(0), -r.rayDirection(1), -r.rayDirection(2));
     L.normalize();
-    GLVector R = 2 * (L * N) * (N - L);
+    GLVector R = 2 * ((L * N) * N) - L;
     R.normalize();
     GLVector V = GLVector(
         (mScene->getViewPoint() - r.intersectionPoint)(0),
