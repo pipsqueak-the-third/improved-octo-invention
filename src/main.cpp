@@ -154,11 +154,11 @@
     cube4.setRotation(GLVector(0,0,0));
 
     cube5.setTranslation(GLVector(0,0,0));
-    cube5.setScale(GLVector(500,500,500));
+    cube5.setScale(GLVector(100,200,100));
     cube5.setRotation(GLVector(0,0,0));
 
     //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
-    bunny_material.color = Color(0,0,0);
+    bunny_material.color = Color(1,1,0);
     bunny.setMaterial(bunny_material);
 
     cube1_material.color = Color(0,0,1);
@@ -170,22 +170,22 @@
     cube3_material.color = Color(1,0,0);
     cube3.setMaterial(cube3_material);
 
-    cube4_material.color = Color(0,0.55,0.1);
+    cube4_material.color = Color(0.9,0.9,0.9);
     cube4.setMaterial(cube4_material);
 
-    cube5_material.color = Color(0, 0.6, 1);
+    cube5_material.color = Color(1, 1, 1);
     cube5.setMaterial(cube5_material);
 
     sphere1_material.color = Color(0,0,0);
     scene->getSpheres()[0].setMaterial(sphere1_material);
 
-    sphere2_material.color = Color(0,0,0);
+    sphere2_material.color = Color(1,1,0);
     scene->getSpheres()[1].setMaterial(sphere2_material);
 
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
-    scene->addPointLight(GLPoint (0,0,0));
+    scene->addPointLight(GLPoint (0,0,-200));
 
     /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
 

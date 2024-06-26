@@ -61,8 +61,10 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
 void SolidRenderer::shade(HitRecord &r) {
 
     GLVector N = r.normal;
-    GLVector L = r.rayDirection;
+    GLVector L = GLVector(-r.rayDirection(0), -r.rayDirection(1), -r.rayDirection(2));
+    L.normalize();
     GLVector R = 2 * (L * N) * (N - L);
+    R.normalize();
     GLVector V = GLVector(
         (mScene->getViewPoint() - r.intersectionPoint)(0),
         (mScene->getViewPoint() - r.intersectionPoint)(1),
@@ -76,9 +78,9 @@ void SolidRenderer::shade(HitRecord &r) {
     double shiny = r.modelId != -1 ? mScene->getModels() [r.modelId].getMaterial().reflection : mScene->getModels()[r.sphereId].getMaterial().reflection;
 
     double I_i = 1;
-    double I_ambient = 0.6;
+    double I_ambient = 0.7;
 
-    double I_total = I_ambient * k_ambient + k_diffuse * I_i * (L * N) + k_specular * I_i * (R * V);
+    double I_total = I_ambient * k_ambient + k_diffuse * I_i * (L * N) + k_specular * I_i * pow((R * V), shiny);
 
     if (r.modelId != -1){
         r.color = (mScene->getModels()[r.modelId].getMaterial().color);
