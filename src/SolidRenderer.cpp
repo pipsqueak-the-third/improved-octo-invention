@@ -61,10 +61,20 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
 void SolidRenderer::shade(HitRecord &r) {
 
     GLVector N = r.normal;
-    GLVector L = GLVector(-r.rayDirection(0), -r.rayDirection(1), -r.rayDirection(2));
+
+    //light vector
+    GLVector L = GLVector(
+        mScene->getPointLights()[0](0) - r.intersectionPoint(0),
+        mScene->getPointLights()[0](1) - r.intersectionPoint(1),
+        mScene->getPointLights()[0](2)  - r.intersectionPoint(2)
+    );
     L.normalize();
+
+    //reflection vector
     GLVector R = 2 * ((L * N) * N) - L;
     R.normalize();
+
+    //viewpoint vector
     GLVector V = GLVector(
         (mScene->getViewPoint() - r.intersectionPoint)(0),
         (mScene->getViewPoint() - r.intersectionPoint)(1),
@@ -75,13 +85,15 @@ void SolidRenderer::shade(HitRecord &r) {
     const double k_diffuse = 0.4;
     const double k_specular = 0.2;
 
-    double shiny = 20;
-    // double shiny = r.modelId != -1 ? mScene->getModels() [r.modelId].getMaterial().reflection : mScene->getModels()[r.sphereId].getMaterial().reflection;
+    //intensity of highlights
+    double n = 20;
 
+    //idk man
     double I_i = 1;
-    double I_ambient = 0.7;
+    double I_ambient = 1;
 
-    double I_total = I_ambient * k_ambient + k_diffuse * I_i * (L * N) + k_specular * I_i * pow((R * V), shiny);
+    //calculates intensity that gets multiplied to color
+    double I_total = I_ambient * k_ambient + k_diffuse * I_i * std::max(0.0, L * N) + k_specular * I_i * pow(std::max(0.0, R * V), n);
 
     if (r.modelId != -1){
         r.color = (mScene->getModels()[r.modelId].getMaterial().color);
