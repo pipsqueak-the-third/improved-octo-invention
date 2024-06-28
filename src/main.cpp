@@ -159,6 +159,7 @@
 
     //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
     bunny_material.color = Color(1,0,1);
+    bunny_material.reflection = 1;
     bunny.setMaterial(bunny_material);
 
     cube1_material.color = Color(0,0,1);
@@ -177,9 +178,11 @@
     cube5.setMaterial(cube5_material);
 
     sphere1_material.color = Color(0,1,1);
+    sphere1_material.reflection = 1;
     scene->getSpheres()[0].setMaterial(sphere1_material);
 
     sphere2_material.color = Color(1,1,0);
+    sphere2_material.reflection = 1;
     scene->getSpheres()[1].setMaterial(sphere2_material);
 
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
