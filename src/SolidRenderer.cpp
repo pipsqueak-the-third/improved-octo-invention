@@ -60,6 +60,8 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
  */
 void SolidRenderer::shade(HitRecord &r) {
 
+    // --- PHONG SHADING ---
+
     GLVector N = r.normal;
 
     //light vector
@@ -89,18 +91,52 @@ void SolidRenderer::shade(HitRecord &r) {
     double n = 20;
 
     //idk man
-    double I_i = 1.2;
+    double I_i = 1.0;
     double I_ambient = 1;
 
     //calculates intensity that gets multiplied to color
     double I_total = I_ambient * k_ambient + k_diffuse * I_i * std::max(0.0, L * N) + k_specular * I_i * pow(std::max(0.0, R * V), n);
 
+    //--- PHONG SHADING END ---
+
+    // --- SHADOWS ---
+    double intensity = 1;
+    Ray shadow = Ray();
+    shadow.origin = GLPoint(
+        r.intersectionPoint(0) + 0.00001,
+        r.intersectionPoint(1) + 0.00001,
+        r.intersectionPoint(2) + 0.00001 );
+
+    shadow.direction = (mScene->getPointLights()[0]) - shadow.origin;
+    shadow.direction.normalize();
+
+    HitRecord shadow_hr;
+    shadow_hr.color = Color(1,1,1);
+    shadow_hr.intersectionPoint = shadow.origin;
+    shadow_hr.parameter = sqrt(
+        pow(mScene->getPointLights()[0](0) - shadow.origin(0),2)
+        + pow(mScene->getPointLights()[0](1) - shadow.origin(1),2)
+        + pow(mScene->getPointLights()[0](2) - shadow.origin(2),2)
+    );
+    shadow_hr.rayDirection = shadow.direction;
+    shadow_hr.recursions = 0;
+    shadow_hr.modelId = r.modelId;
+    shadow_hr.sphereId = r.sphereId;
+
+    if(mScene->intersect(shadow, shadow_hr, EPSILON)) {
+        intensity = 0.5;
+    }
+
+    // --- SHADOWS END ---
+
     if (r.modelId != -1){
         r.color = (mScene->getModels()[r.modelId].getMaterial().color);
         r.color *= I_total;
+       r.color *= intensity;
     }
     else if (r.sphereId != -1){
         r.color = mScene->getSpheres()[r.sphereId].getMaterial().color;
         r.color *= I_total;
+       r.color *= intensity;
     }
 }

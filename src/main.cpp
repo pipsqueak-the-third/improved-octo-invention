@@ -153,7 +153,7 @@
     cube4.setScale(GLVector(500,0.01,500));
     cube4.setRotation(GLVector(0,0,0));
 
-    cube5.setTranslation(GLVector(0,0,-200));
+    cube5.setTranslation(GLVector(0,0,0));
     cube5.setScale(GLVector(500,500,500));
     cube5.setRotation(GLVector(0,0,0));
 
@@ -188,7 +188,7 @@
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
-    scene->addPointLight(GLPoint (0,0,200));
+    scene->addPointLight(GLPoint (-50,50,200));
 
     /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
 
