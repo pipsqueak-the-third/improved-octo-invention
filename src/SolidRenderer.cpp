@@ -101,11 +101,13 @@ void SolidRenderer::shade(HitRecord &r) {
 
     // --- SHADOWS ---
     double intensity = 1;
+    int reflection;
     Ray shadow = Ray();
+    GLVector offset = (mScene->getPointLights()[0]) - r.intersectionPoint;
     shadow.origin = GLPoint(
-        r.intersectionPoint(0) + 0.00001,
-        r.intersectionPoint(1) + 0.00001,
-        r.intersectionPoint(2) + 0.00001 );
+        r.intersectionPoint(0) + (0.00001 * offset(0)),
+        r.intersectionPoint(1) + (0.00001 * offset(1)),
+        r.intersectionPoint(2) + (0.00001 * offset(2)) );
 
     shadow.direction = (mScene->getPointLights()[0]) - shadow.origin;
     shadow.direction.normalize();
@@ -128,6 +130,23 @@ void SolidRenderer::shade(HitRecord &r) {
     }
 
     // --- SHADOWS END ---
+
+    // --- RAYTRACING ---
+
+    if (r.modelId != -1) { 
+        reflection = mScene->getModels()[r.modelId].getMaterial().reflection;
+    } else {
+        reflection = mScene->getSpheres()[r.sphereId].getMaterial().reflection;
+    }
+
+    if (reflection > 0) {
+        Ray reflection_ray;
+        reflection_ray.origin = r.intersectionPoint;
+    }
+
+
+    
+    // --- RAYRTRACING END ---
 
     if (r.modelId != -1){
         r.color = (mScene->getModels()[r.modelId].getMaterial().color);

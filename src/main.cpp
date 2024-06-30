@@ -188,7 +188,7 @@
     /* Stelle materialeigenschaften zur verfügung (Relevant für Aufgabenblatt 4)*/
 
     /* Aufgabenblatt 4 Fügen Sie ein Licht zur Szene hinzu */
-    scene->addPointLight(GLPoint (-50,50,200));
+    scene->addPointLight(GLPoint (-100,50,100));
 
     /* Aufgabenblatt 3: erzeugen Sie einen SolidRenderer (vorzugsweise mit einem shared_ptr) und rufen sie die Funktion renderRaycast auf */
 
