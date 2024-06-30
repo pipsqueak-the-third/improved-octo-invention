@@ -126,11 +126,7 @@
     Material bunny_material,
     cube1_material, cube2_material, cube3_material, cube4_material, cube5_material,
     sphere1_material, sphere2_material;
-
-    bunny_material.reflection = 1.0;
-
-    sphere1_material.reflection = 1,0;
-    sphere2_material.reflection = 1.0;
+    
     /* Aufgabenblatt 3: (Wenn nötig) Transformationen der Modelle im World space, sodass sie von der Kamera gesehen werden könnnen. Die nötigen Transformationen für eine Darstellung entsprechend der Beispiellösung ist in der Aufgabenstellung gegeben. */
 
     bunny.setTranslation(GLVector(0,-15,-20));
@@ -158,7 +154,7 @@
     cube5.setRotation(GLVector(0,0,0));
 
     //Setting Materials 1xBunny, 4x Cubes, 2x Spheres
-    bunny_material.color = Color(1,0,1);
+    bunny_material.color = Color(0,0,0);
     bunny_material.reflection = 1;
     bunny.setMaterial(bunny_material);
 
@@ -177,11 +173,11 @@
     cube5_material.color = Color(1, 1, 1);
     cube5.setMaterial(cube5_material);
 
-    sphere1_material.color = Color(0,1,1);
+    sphere1_material.color = Color(0,0,0);
     sphere1_material.reflection = 1;
     scene->getSpheres()[0].setMaterial(sphere1_material);
 
-    sphere2_material.color = Color(1,1,0);
+    sphere2_material.color = Color(0,0,0);
     sphere2_material.reflection = 1;
     scene->getSpheres()[1].setMaterial(sphere2_material);
 

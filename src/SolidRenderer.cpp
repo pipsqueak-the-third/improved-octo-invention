@@ -101,7 +101,7 @@ void SolidRenderer::shade(HitRecord &r) {
 
     // --- SHADOWS ---
     double intensity = 1;
-    int reflection;
+    float reflection;
     Ray shadow = Ray();
     GLVector offset = (mScene->getPointLights()[0]) - r.intersectionPoint;
     shadow.origin = GLPoint(
@@ -139,9 +139,37 @@ void SolidRenderer::shade(HitRecord &r) {
         reflection = mScene->getSpheres()[r.sphereId].getMaterial().reflection;
     }
 
-    if (reflection > 0) {
+    Color finalColor(0, 0, 0);
+
+    // Recursion
+    if (reflection > 0 && r.recursions < 6) {
+        // Calculate direction of reflection ray
+        GLVector reflectionDirection = (2 * (V * N) * N) - V;
+        reflectionDirection.normalize();
+
+        //init reflection ray
         Ray reflection_ray;
-        reflection_ray.origin = r.intersectionPoint;
+        reflection_ray.direction = reflectionDirection;
+        reflection_ray.origin = r.intersectionPoint + (0.00001 * reflectionDirection);
+
+        //intit reflection hr
+        HitRecord reflection_hr;
+        reflection_hr.color = Color(0,0,0);
+        reflection_hr.modelId = -1;
+        reflection_hr.sphereId = -1;
+        reflection_hr.parameter = std::numeric_limits<double>::max();
+        reflection_hr.rayDirection = reflection_ray.direction;
+        reflection_hr.recursions = r.recursions + 1;
+        reflection_hr.intersectionPoint = r.intersectionPoint;
+        reflection_hr.rayDirection = reflection_ray.direction;
+
+        std::cout << reflection_hr.recursions;
+
+        if (mScene->intersect(reflection_ray, reflection_hr, EPSILON)) {
+            shade(reflection_hr);
+            finalColor = reflection_hr.color;
+            finalColor *= reflection;
+        }
     }
 
 
@@ -149,13 +177,17 @@ void SolidRenderer::shade(HitRecord &r) {
     // --- RAYRTRACING END ---
 
     if (r.modelId != -1){
-        r.color = (mScene->getModels()[r.modelId].getMaterial().color);
-        r.color *= I_total;
-       r.color *= intensity;
+        Color phongColor = mScene->getModels()[r.modelId].getMaterial().color;
+        phongColor *= I_total;
+        phongColor *= intensity;
+        r.color = phongColor;
+        r.color += finalColor;
     }
     else if (r.sphereId != -1){
-        r.color = mScene->getSpheres()[r.sphereId].getMaterial().color;
-        r.color *= I_total;
-       r.color *= intensity;
+        Color phongColor = mScene->getSpheres()[r.sphereId].getMaterial().color;
+        phongColor *= I_total;
+        phongColor *= intensity;
+        r.color = phongColor;
+        r.color += finalColor;
     }
 }
