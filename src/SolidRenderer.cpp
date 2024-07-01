@@ -21,7 +21,6 @@ void SolidRenderer::renderRaycast() {
   //    computeImageRow( i );
   //}
   //  Parallelisierung mit OpenMP:
-  printf("%f", mScene->getSpheres()[0].getMaterial().color.b);
   #pragma omp parallel for
   for(size_t i = 0; i < mImage->getHeight(); ++i ){
       computeImageRow( i );
@@ -59,9 +58,7 @@ void SolidRenderer::computeImageRow(size_t rowNumber) {
  *  Aufgabenblatt 4: Hier wird das raytracing implementiert. Siehe Aufgabenstellung!
  */
 void SolidRenderer::shade(HitRecord &r) {
-
     // --- PHONG SHADING ---
-
     GLVector N = r.normal;
 
     //light vector
@@ -73,7 +70,7 @@ void SolidRenderer::shade(HitRecord &r) {
     L.normalize();
 
     //reflection vector
-    GLVector R = (2 * ((L * N) * N)) - L;
+    GLVector R = 2 * (L * N) * N - L;
     R.normalize();
 
     //viewpoint vector
@@ -86,22 +83,21 @@ void SolidRenderer::shade(HitRecord &r) {
     const double k_ambient = 0.4;
     const double k_diffuse = 0.4;
     const double k_specular = 0.2;
-
     //intensity of highlights
     double n = 20;
 
-    //idk man
+    //I think this is what needed implementing
     double I_i = 1.0;
-    double I_ambient = 1;
+    double I_ambient = k_ambient * I_i;
+    double I_diffuse = k_diffuse * I_i * std::max(0.0, L * N);
+    double I_specular = k_specular * I_i * std::pow(std::max(0.0, R * V), n);
 
-    //calculates intensity that gets multiplied to color
-    double I_total = I_ambient * k_ambient + k_diffuse * I_i * std::max(0.0, L * N) + k_specular * I_i * pow(std::max(0.0, R * V), n);
-
+    //I believe this is the correct light intensity equation
+    double I_total = I_ambient + I_diffuse + I_specular;
     //--- PHONG SHADING END ---
 
     // --- SHADOWS ---
     double intensity = 1;
-    float reflection;
     Ray shadow = Ray();
     GLVector offset = (mScene->getPointLights()[0]) - r.intersectionPoint;
     shadow.origin = GLPoint(
@@ -128,11 +124,10 @@ void SolidRenderer::shade(HitRecord &r) {
     if(mScene->intersect(shadow, shadow_hr, EPSILON)) {
         intensity = 0.5;
     }
-
     // --- SHADOWS END ---
 
     // --- RAYTRACING ---
-
+    float reflection;
     if (r.modelId != -1) { 
         reflection = mScene->getModels()[r.modelId].getMaterial().reflection;
     } else {
@@ -163,7 +158,7 @@ void SolidRenderer::shade(HitRecord &r) {
         reflection_hr.intersectionPoint = r.intersectionPoint;
         reflection_hr.rayDirection = reflection_ray.direction;
 
-        std::cout << reflection_hr.recursions;
+        //std::cout << reflection_hr.recursions;
 
         if (mScene->intersect(reflection_ray, reflection_hr, EPSILON)) {
             shade(reflection_hr);

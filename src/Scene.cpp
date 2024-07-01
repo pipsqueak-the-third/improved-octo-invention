@@ -169,8 +169,7 @@ void Scene::load(const std::vector<std::string> &pFiles) {
 
     // Für alle Meshes des Models
     for (int i = 0; i < assimpScene->mNumMeshes; i++) {
-      std::cout << "\t\tMesh-Index: " << i << " (" << meshes[i]->mNumFaces
-                << " Faces)" << std::endl;
+      std::cout << "\t\tMesh-Index: " << i << " (" << meshes[i]->mNumFaces << " Faces)" << std::endl;
       auto faces = meshes[i]->mFaces;
       auto vertices = meshes[i]->mVertices;
 

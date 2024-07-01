@@ -1,3 +1,0 @@
-/Users/navi/Documents/improved-octo-invention/waffle/CMakeFiles/CGPraktikum.dir
-/Users/navi/Documents/improved-octo-invention/waffle/CMakeFiles/edit_cache.dir
-/Users/navi/Documents/improved-octo-invention/waffle/CMakeFiles/rebuild_cache.dir

@@ -60,8 +60,11 @@ else()
     message( STATUS "Did not include plugin AssImpMeshImporter due to missing libraries")
 endif()
 
-
-
+set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp")
+set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
+set(OpenMP_CXX_LIB_NAMES "libomp")
+set(OpenMP_C_LIB_NAMES "libomp")
+set(OpenMP_libomp_LIBRARY "/opt/homebrew/opt/libomp/lib/libomp.dylib")
 
 # Parallelisierung mit OpenMP
 find_package( OpenMP )
