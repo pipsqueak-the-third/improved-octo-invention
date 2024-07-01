@@ -3,3 +3,4 @@ build/
 results/
 waffle/
 .vscode/
+CMakeList.txt/
