@@ -100,10 +100,11 @@ void SolidRenderer::shade(HitRecord &r) {
     double intensity = 1;
     Ray shadow = Ray();
     GLVector offset = (mScene->getPointLights()[0]) - r.intersectionPoint;
+    //I think we were supposed EPSILON
     shadow.origin = GLPoint(
-        r.intersectionPoint(0) + (0.00001 * offset(0)),
-        r.intersectionPoint(1) + (0.00001 * offset(1)),
-        r.intersectionPoint(2) + (0.00001 * offset(2)) );
+        r.intersectionPoint(0) + (EPSILON * offset(0)),
+        r.intersectionPoint(1) + (EPSILON * offset(1)),
+        r.intersectionPoint(2) + (EPSILON * offset(2)) );
 
     shadow.direction = (mScene->getPointLights()[0]) - shadow.origin;
     shadow.direction.normalize();
@@ -135,7 +136,6 @@ void SolidRenderer::shade(HitRecord &r) {
     }
 
     Color finalColor(0, 0, 0);
-
     // Recursion
     if (reflection > 0 && r.recursions < 6) {
         // Calculate direction of reflection ray
@@ -145,7 +145,7 @@ void SolidRenderer::shade(HitRecord &r) {
         //init reflection ray
         Ray reflection_ray;
         reflection_ray.direction = reflectionDirection;
-        reflection_ray.origin = r.intersectionPoint + (0.00001 * reflectionDirection);
+        reflection_ray.origin = r.intersectionPoint + (EPSILON * reflectionDirection);
 
         //intit reflection hr
         HitRecord reflection_hr;
@@ -166,9 +166,6 @@ void SolidRenderer::shade(HitRecord &r) {
             finalColor *= reflection;
         }
     }
-
-
-    
     // --- RAYRTRACING END ---
 
     if (r.modelId != -1){
