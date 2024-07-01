@@ -62,11 +62,7 @@ void SolidRenderer::shade(HitRecord &r) {
     GLVector N = r.normal;
 
     //light vector
-    GLVector L = GLVector(
-        mScene->getPointLights()[0](0) - r.intersectionPoint(0),
-        mScene->getPointLights()[0](1) - r.intersectionPoint(1),
-        mScene->getPointLights()[0](2)  - r.intersectionPoint(2)
-    );
+    GLVector L = mScene->getPointLights()[0] - r.intersectionPoint;
     L.normalize();
 
     //reflection vector
@@ -74,17 +70,14 @@ void SolidRenderer::shade(HitRecord &r) {
     R.normalize();
 
     //viewpoint vector
-    GLVector V = GLVector(
-        (mScene->getViewPoint() - r.intersectionPoint)(0),
-        (mScene->getViewPoint() - r.intersectionPoint)(1),
-        (mScene->getViewPoint() - r.intersectionPoint)(2));
+    GLVector V = mScene->getViewPoint() - r.intersectionPoint;
     V.normalize();
 
     const double k_ambient = 0.4;
     const double k_diffuse = 0.4;
     const double k_specular = 0.2;
     //intensity of highlights
-    double n = 20;
+    double n = 20.0;
 
     //I think this is what needed implementing
     double I_i = 1.0;
@@ -101,11 +94,7 @@ void SolidRenderer::shade(HitRecord &r) {
     Ray shadow = Ray();
     GLVector offset = (mScene->getPointLights()[0]) - r.intersectionPoint;
     //I think we were supposed EPSILON
-    shadow.origin = GLPoint(
-        r.intersectionPoint(0) + (EPSILON * offset(0)),
-        r.intersectionPoint(1) + (EPSILON * offset(1)),
-        r.intersectionPoint(2) + (EPSILON * offset(2)) );
-
+    shadow.origin = r.intersectionPoint + (EPSILON * offset);
     shadow.direction = (mScene->getPointLights()[0]) - shadow.origin;
     shadow.direction.normalize();
 
@@ -136,10 +125,11 @@ void SolidRenderer::shade(HitRecord &r) {
     }
 
     Color finalColor(0, 0, 0);
+
     // Recursion
     if (reflection > 0 && r.recursions < 6) {
         // Calculate direction of reflection ray
-        GLVector reflectionDirection = (2 * (V * N) * N) - V;
+        GLVector reflectionDirection = (2 * (N * (N * V))) - V;
         reflectionDirection.normalize();
 
         //init reflection ray
@@ -172,6 +162,7 @@ void SolidRenderer::shade(HitRecord &r) {
         Color phongColor = mScene->getModels()[r.modelId].getMaterial().color;
         phongColor *= I_total;
         phongColor *= intensity;
+        phongColor *= (1 - reflection);
         r.color = phongColor;
         r.color += finalColor;
     }
@@ -179,6 +170,7 @@ void SolidRenderer::shade(HitRecord &r) {
         Color phongColor = mScene->getSpheres()[r.sphereId].getMaterial().color;
         phongColor *= I_total;
         phongColor *= intensity;
+        phongColor *= (1 - reflection);
         r.color = phongColor;
         r.color += finalColor;
     }
