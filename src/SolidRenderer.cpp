@@ -66,7 +66,7 @@ void SolidRenderer::shade(HitRecord &r) {
     L.normalize();
 
     //reflection vector
-    GLVector R = 2 * (L * N) * N - L;
+    GLVector R = ((2 * (L * N)) * N) - L;
     R.normalize();
 
     //viewpoint vector
@@ -81,6 +81,7 @@ void SolidRenderer::shade(HitRecord &r) {
 
     //I think this is what needed implementing
     double I_i = 1.0;
+    
     double I_ambient = k_ambient * I_i;
     double I_diffuse = k_diffuse * I_i * std::max(0.0, L * N);
     double I_specular = k_specular * I_i * std::pow(std::max(0.0, R * V), n);
@@ -127,9 +128,9 @@ void SolidRenderer::shade(HitRecord &r) {
     Color finalColor(0, 0, 0);
 
     // Recursion
-    if (reflection > 0 && r.recursions < 6) {
+    if (reflection > 0 && r.recursions < 20) {
         // Calculate direction of reflection ray
-        GLVector reflectionDirection = (2 * (N * (N * V))) - V;
+        GLVector reflectionDirection = ((2 * (N * V)) * N) - V;
         reflectionDirection.normalize();
 
         //init reflection ray
@@ -146,13 +147,13 @@ void SolidRenderer::shade(HitRecord &r) {
         reflection_hr.rayDirection = reflection_ray.direction;
         reflection_hr.recursions = r.recursions + 1;
         reflection_hr.intersectionPoint = r.intersectionPoint;
-        reflection_hr.normal = r.normal;
 
         //std::cout << reflection_hr.recursions;
 
         if (mScene->intersect(reflection_ray, reflection_hr, EPSILON)) {
             shade(reflection_hr);
             finalColor = reflection_hr.color;
+            finalColor *= reflection;
         }
     }
     // --- RAYRTRACING END ---
