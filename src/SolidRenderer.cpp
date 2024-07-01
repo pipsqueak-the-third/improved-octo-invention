@@ -146,14 +146,13 @@ void SolidRenderer::shade(HitRecord &r) {
         reflection_hr.rayDirection = reflection_ray.direction;
         reflection_hr.recursions = r.recursions + 1;
         reflection_hr.intersectionPoint = r.intersectionPoint;
-        reflection_hr.rayDirection = reflection_ray.direction;
+        reflection_hr.normal = r.normal;
 
         //std::cout << reflection_hr.recursions;
 
         if (mScene->intersect(reflection_ray, reflection_hr, EPSILON)) {
             shade(reflection_hr);
             finalColor = reflection_hr.color;
-            finalColor *= reflection;
         }
     }
     // --- RAYRTRACING END ---
@@ -162,7 +161,6 @@ void SolidRenderer::shade(HitRecord &r) {
         Color phongColor = mScene->getModels()[r.modelId].getMaterial().color;
         phongColor *= I_total;
         phongColor *= intensity;
-        phongColor *= (1 - reflection);
         r.color = phongColor;
         r.color += finalColor;
     }
@@ -170,7 +168,6 @@ void SolidRenderer::shade(HitRecord &r) {
         Color phongColor = mScene->getSpheres()[r.sphereId].getMaterial().color;
         phongColor *= I_total;
         phongColor *= intensity;
-        phongColor *= (1 - reflection);
         r.color = phongColor;
         r.color += finalColor;
     }
